@@ -1,0 +1,787 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="swift学习笔记required修饰符的使用规则 required修饰符只能用于修饰类初始化方法。 当子类含有异于父类的初始化方法时（初始化方法参数类型和数量异于父类），子类必须要实现父类的required初始化方法，并且也要使用required修饰符而不是override。 当子类没有初始化方法时，可以不用实现父类的required初始化方法。  enum和struct为值类型，而class为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gungnir">
+<meta property="og:url" content="csy1998.com/2018/04/03/9_Swift学习笔记/index.html">
+<meta property="og:site_name" content="Gungnir">
+<meta property="og:description" content="swift学习笔记required修饰符的使用规则 required修饰符只能用于修饰类初始化方法。 当子类含有异于父类的初始化方法时（初始化方法参数类型和数量异于父类），子类必须要实现父类的required初始化方法，并且也要使用required修饰符而不是override。 当子类没有初始化方法时，可以不用实现父类的required初始化方法。  enum和struct为值类型，而class为">
+<meta property="og:image" content="csy1998.com/2018/04/03/9_Swift学习笔记/屏幕快照%202018-04-05%2010.31.54.png">
+<meta property="og:image" content="csy1998.com/2018/04/03/9_Swift学习笔记/屏幕快照%202018-04-05%2010.44.13.png">
+<meta property="og:image" content="csy1998.com/2018/04/03/9_Swift学习笔记/屏幕快照%202018-04-05%2010.49.49.png">
+<meta property="og:image" content="csy1998.com/2018/04/03/9_Swift学习笔记/屏幕快照%202018-04-05%2011.08.37.png">
+<meta property="og:image" content="csy1998.com/2018/04/03/9_Swift学习笔记/屏幕快照%202018-04-05%2011.25.55.png">
+<meta property="og:image" content="csy1998.com/2018/04/03/9_Swift学习笔记/屏幕快照%202018-04-05%2015.26.10.png">
+<meta property="og:updated_time" content="2018-04-07T02:54:32.207Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gungnir">
+<meta name="twitter:description" content="swift学习笔记required修饰符的使用规则 required修饰符只能用于修饰类初始化方法。 当子类含有异于父类的初始化方法时（初始化方法参数类型和数量异于父类），子类必须要实现父类的required初始化方法，并且也要使用required修饰符而不是override。 当子类没有初始化方法时，可以不用实现父类的required初始化方法。  enum和struct为值类型，而class为">
+<meta name="twitter:image" content="csy1998.com/2018/04/03/9_Swift学习笔记/屏幕快照%202018-04-05%2010.31.54.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="csy1998.com/2018/04/03/9_Swift学习笔记/"/>
+
+
+
+
+
+  <title> | Gungnir</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Gungnir</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">What you want decide where you go</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Kategorien
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="csy1998.com/2018/04/03/9_Swift学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Gungnir">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/my_lover.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gungnir">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-03T21:15:45+08:00">
+                2018-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="swift学习笔记"><a href="#swift学习笔记" class="headerlink" title="swift学习笔记"></a>swift学习笔记</h1><h4 id="required修饰符的使用规则"><a href="#required修饰符的使用规则" class="headerlink" title="required修饰符的使用规则"></a>required修饰符的使用规则</h4><ul>
+<li><code>required</code>修饰符只能用于修饰类初始化方法。</li>
+<li>当子类含有异于父类的初始化方法时（初始化方法参数类型和数量异于父类），子类必须要实现父类的<code>required</code>初始化方法，并且也要使用<code>required</code>修饰符而不是<code>override</code>。</li>
+<li>当子类没有初始化方法时，可以不用实现父类的<code>required</code>初始化方法。</li>
+</ul>
+<h5 id="enum和struct为值类型，而class为引用类型。值类型内部方法要修改内部成员要加mutating关键字"><a href="#enum和struct为值类型，而class为引用类型。值类型内部方法要修改内部成员要加mutating关键字" class="headerlink" title="enum和struct为值类型，而class为引用类型。值类型内部方法要修改内部成员要加mutating关键字"></a>enum和struct为值类型，而class为引用类型。值类型内部方法要修改内部成员要加mutating关键字</h5><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Count13</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">var</span> name: <span class="type">String</span>?	</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> c13 = <span class="type">Count13</span>(name: <span class="string">"JoY"</span>)    <span class="comment">// 编译报错 可以在class内部加一个init函数 或者改为struct</span></div></pre></td></tr></table></figure>
+<h4 id="基础："><a href="#基础：" class="headerlink" title="基础："></a>基础：</h4><ul>
+<li><p>空格规定：运算符不能直接跟在变量或者常量后面</p>
+</li>
+<li><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">print</span>(<span class="string">"<span class="subst">\(x)</span> "</span>, terminator: <span class="string">""</span>)   <span class="comment">//不换行输出 </span></div><div class="line"><span class="keyword">let</span> theInput = <span class="built_in">readLine</span>()  <span class="comment">// 接受用户输入</span></div><div class="line"><span class="keyword">typealias</span> <span class="type">MYInt</span> = <span class="type">Int</span>  <span class="comment">// 类型声明</span></div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+</ul>
+<h4 id="数据结构："><a href="#数据结构：" class="headerlink" title="数据结构："></a>数据结构：</h4><p><img src="屏幕快照 2018-04-05 10.31.54.png" alt="屏幕快照 2018-04-05 10.31.54"></p>
+<ul>
+<li>小数默认double类型</li>
+<li>类型？声明表示可选类型 </li>
+<li>值！表示强行解析</li>
+<li>类型！声明表示可以自动解析</li>
+<li>运算符取消了++ / –</li>
+<li>先算术运算，后移位运算，最后位运算。请特别注意：1 &lt;&lt; 3 + 2 &amp; 7 等价于 (1 &lt;&lt; (3 + 2))&amp;7</li>
+</ul>
+<p><img src="屏幕快照 2018-04-05 10.44.13.png" alt="屏幕快照 2018-04-05 10.44.13"></p>
+<h4 id="一些语法："><a href="#一些语法：" class="headerlink" title="一些语法："></a>一些语法：</h4><ul>
+<li>repeat…while 循环</li>
+<li>switch中的fallthrough : 一个case结束后继续执行下一个case</li>
+<li>String.utf8/16</li>
+</ul>
+<p><img src="屏幕快照 2018-04-05 10.49.49.png" alt="屏幕快照 2018-04-05 10.49.49"></p>
+<ul>
+<li><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 数组</span></div><div class="line"><span class="keyword">var</span> someInts = [<span class="type">Int</span>]() </div><div class="line"><span class="keyword">var</span> someInts = [<span class="type">Int</span>](repeating: <span class="number">0</span>, <span class="built_in">count</span>: <span class="number">3</span>)  </div><div class="line"><span class="keyword">var</span> someInts:[<span class="type">Int</span>] = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>]</div><div class="line"></div><div class="line"><span class="comment">// 字典</span></div><div class="line"><span class="keyword">var</span> oldVal = someDict.updateValue(<span class="string">"One 新的值"</span>, forKey: <span class="number">1</span>)  <span class="comment">// 修改</span></div><div class="line">someDict[<span class="number">1</span>] = <span class="string">"One 新的值"</span></div><div class="line"> </div><div class="line"><span class="keyword">var</span> removedValue = someDict.removeValue(forKey: <span class="number">2</span>)   <span class="comment">// 删除</span></div><div class="line">someDict[<span class="number">2</span>] = <span class="literal">nil</span></div><div class="line"></div><div class="line"><span class="keyword">let</span> dictKeys = [<span class="type">Int</span>](someDict.keys)    <span class="comment">// 转数组</span></div><div class="line"><span class="keyword">let</span> dictValues = [<span class="type">String</span>](someDict.values)</div></pre></td></tr></table></figure>
+</li>
+<li><p>函数参数（值传递）一般常量不可改变，加inout 关键字可以将参数变成变量</p>
+</li>
+</ul>
+<h4 id="闭包（引用类型）："><a href="#闭包（引用类型）：" class="headerlink" title="闭包（引用类型）："></a>闭包（引用类型）：</h4><ul>
+<li><p>闭包形式：</p>
+<p><img src="屏幕快照 2018-04-05 11.08.37.png" alt="屏幕快照 2018-04-05 11.08.37"></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 闭包实例</span></div><div class="line"><span class="keyword">let</span> studname = &#123; <span class="built_in">print</span>(<span class="string">"Swift 闭包实例。"</span>) &#125;</div><div class="line">studname()</div><div class="line"></div><div class="line"><span class="keyword">let</span> divide = &#123;(val1: <span class="type">Int</span>, val2: <span class="type">Int</span>) -&gt; <span class="type">Int</span> <span class="keyword">in</span> </div><div class="line">   <span class="keyword">return</span> val1 / val2 </div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> result = divide(<span class="number">200</span>, <span class="number">20</span>)</div><div class="line"></div><div class="line"><span class="comment">// 闭包表达式</span></div><div class="line"><span class="keyword">let</span> names = [<span class="string">"AT"</span>, <span class="string">"AE"</span>, <span class="string">"D"</span>, <span class="string">"S"</span>, <span class="string">"BE"</span>]</div><div class="line"></div><div class="line"><span class="comment">// 使用普通函数(或内嵌函数)提供排序功能,闭包函数类型需为(String, String) -&gt; Bool。</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">backwards</span><span class="params">(s1: String, s2: String)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">return</span> s1 &gt; s2</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> reversed = names.sorted(by: backwards)</div><div class="line"></div><div class="line"><span class="comment">// 或者 var reversed = names.sorted( by: &#123; $0 &gt; $1 &#125; ) 参数名称缩写</span></div><div class="line"><span class="comment">// 或者 var reversed = names.sorted(by: &gt;)  运算符函数</span></div><div class="line"><span class="comment">// 或者 var reversed = names.sorted() &#123; $0 &gt; $1 &#125; 尾随闭包</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="枚举-结构体-类："><a href="#枚举-结构体-类：" class="headerlink" title="枚举 / 结构体 / 类："></a>枚举 / 结构体 / 类：</h4><h5 id="枚举：（值传递，值类型内部方法要修改内部成员要加mutating关键字）"><a href="#枚举：（值传递，值类型内部方法要修改内部成员要加mutating关键字）" class="headerlink" title="枚举：（值传递，值类型内部方法要修改内部成员要加mutating关键字）"></a>枚举：（值传递，值类型内部方法要修改内部成员要加mutating关键字）</h5><ul>
+<li>可以实例化</li>
+<li>可以定义构造函数</li>
+<li>可以遵守协议</li>
+</ul>
+<h5 id="结构体：（值传递，值类型内部方法要修改内部成员要加mutating关键字）"><a href="#结构体：（值传递，值类型内部方法要修改内部成员要加mutating关键字）" class="headerlink" title="结构体：（值传递，值类型内部方法要修改内部成员要加mutating关键字）"></a>结构体：（值传递，值类型内部方法要修改内部成员要加mutating关键字）</h5><h5 id="类："><a href="#类：" class="headerlink" title="类："></a>类：</h5><ul>
+<li>区别于结构体的特征：可以继承 / 引用类型</li>
+<li>!== 和 === 判定两个引用相等或者不相等（若是同时引用一个类则是相等）</li>
+</ul>
+<h4 id="属性："><a href="#属性：" class="headerlink" title="属性："></a>属性：</h4><p><img src="屏幕快照 2018-04-05 11.25.55.png" alt="屏幕快照 2018-04-05 11.25.55"></p>
+<ul>
+<li><p>延迟属性：第一次调用的时候才会计算初始值，lazy标记，必须声明为变量lazy var</p>
+</li>
+<li><p>计算属性：不直接存储值，getter（获取值）/ 可选的 setter （间接设置其他属性或变量的值）。</p>
+</li>
+<li><p>属性观察器：willlSet(设置新值之前调用) / didSet（设置之后调用），初始化中不会调用</p>
+</li>
+<li><p>类型方法（静态方法）：枚举和结构体（static）/ 类（class）</p>
+</li>
+<li><p>下标注脚subscript</p>
+<p>​</p>
+</li>
+</ul>
+<h4 id="面向对象："><a href="#面向对象：" class="headerlink" title="面向对象："></a>面向对象：</h4><h5 id="继承：override重写-final-防止重写"><a href="#继承：override重写-final-防止重写" class="headerlink" title="继承：override重写 / final 防止重写"></a>继承：override重写 / final 防止重写</h5><h5 id="构造："><a href="#构造：" class="headerlink" title="构造："></a>构造：</h5><ul>
+<li>便利构造器convenience：调用同一个类中的指定构造器，并为其参数提供默认值。弱化的init函数，提供默认参数值。</li>
+<li>可失败构造器：init?()  / ini!()</li>
+</ul>
+<h5 id="析构：deinit"><a href="#析构：deinit" class="headerlink" title="析构：deinit"></a>析构：deinit</h5><h5 id="可选链：多个？类型构成链，其中任何一个为nil那么整体就nil"><a href="#可选链：多个？类型构成链，其中任何一个为nil那么整体就nil" class="headerlink" title="可选链：多个？类型构成链，其中任何一个为nil那么整体就nil"></a>可选链：多个？类型构成链，其中任何一个为nil那么整体就nil</h5><h5 id="自动引用计数（ARC）："><a href="#自动引用计数（ARC）：" class="headerlink" title="自动引用计数（ARC）："></a>自动引用计数（ARC）：</h5><ul>
+<li>若引用weak / 无主引用unowned避免强引用带来循环定义</li>
+<li>弱引用和无主引用允许循环引用中的一个实例引用另外一个实例而不保持强引用。实例能够互相引用而不产生循环强引用。</li>
+<li>弱引用：生命周期中会变为nil的实例使用</li>
+<li>无主引用：初始化赋值后再也不会被赋值为nil的实例使用。</li>
+</ul>
+<h5 id="类型转换："><a href="#类型转换：" class="headerlink" title="类型转换："></a>类型转换：</h5><ul>
+<li>is 用于检测值的类型，as 用于转换类型（as? / as!）</li>
+<li><code>AnyObject</code>可以代表任何class类型的实例</li>
+<li><code>Any</code>可以表示任何类型，包括方法类型（function types）</li>
+</ul>
+<h5 id="扩展（extension）：向一个已有的类、结构体或枚举类型添加新功能，不能重写"><a href="#扩展（extension）：向一个已有的类、结构体或枚举类型添加新功能，不能重写" class="headerlink" title="扩展（extension）：向一个已有的类、结构体或枚举类型添加新功能，不能重写"></a>扩展（extension）：向一个已有的类、结构体或枚举类型添加新功能，不能重写</h5><h5 id="协议："><a href="#协议：" class="headerlink" title="协议："></a>协议：</h5><ul>
+<li>属性必须指明只读 / 可读可写</li>
+<li>协议里有init函数，则协议子类必须有required init</li>
+<li>多继承</li>
+<li>类专属协议</li>
+<li>协议合成：&amp;</li>
+<li>协议检查：is / as</li>
+</ul>
+<h5 id="泛型：（数组-字典属于泛型集，泛型类似于函数模版）"><a href="#泛型：（数组-字典属于泛型集，泛型类似于函数模版）" class="headerlink" title="泛型：（数组/字典属于泛型集，泛型类似于函数模版）"></a>泛型：（数组/字典属于泛型集，泛型类似于函数模版）</h5><h5 id="访问控制：（默认的访问级别-internal）"><a href="#访问控制：（默认的访问级别-internal）" class="headerlink" title="访问控制：（默认的访问级别 internal）"></a>访问控制：（默认的访问级别 internal）</h5><p><img src="屏幕快照 2018-04-05 15.26.10.png" alt="屏幕快照 2018-04-05 15.26.10"></p>
+<ul>
+<li>泛型类型或泛型函数的访问级别取泛型类型、函数本身、泛型类型参数三者中的最低访问级别。</li>
+</ul>
+<h4 id="高级操作"><a href="#高级操作" class="headerlink" title="高级操作"></a>高级操作</h4><ul>
+<li><p>位运算</p>
+</li>
+<li><p>运算符重载</p>
+</li>
+<li><p>自定义运算符</p>
+<p>​</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/07/9_搏击俱乐部/" rel="next" title="搏击俱乐部">
+                <i class="fa fa-chevron-left"></i> 搏击俱乐部
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/my_lover.png"
+               alt="Gungnir" />
+          <p class="site-author-name" itemprop="name">Gungnir</p>
+           
+              <p class="site-description motion-element" itemprop="description">准备做一个APP</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">Tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#swift学习笔记"><span class="nav-number">1.</span> <span class="nav-text">swift学习笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#required修饰符的使用规则"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">required修饰符的使用规则</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#enum和struct为值类型，而class为引用类型。值类型内部方法要修改内部成员要加mutating关键字"><span class="nav-number">1.0.0.1.1.</span> <span class="nav-text">enum和struct为值类型，而class为引用类型。值类型内部方法要修改内部成员要加mutating关键字</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基础："><span class="nav-number">1.0.0.2.</span> <span class="nav-text">基础：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据结构："><span class="nav-number">1.0.0.3.</span> <span class="nav-text">数据结构：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一些语法："><span class="nav-number">1.0.0.4.</span> <span class="nav-text">一些语法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#闭包（引用类型）："><span class="nav-number">1.0.0.5.</span> <span class="nav-text">闭包（引用类型）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#枚举-结构体-类："><span class="nav-number">1.0.0.6.</span> <span class="nav-text">枚举 / 结构体 / 类：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#枚举：（值传递，值类型内部方法要修改内部成员要加mutating关键字）"><span class="nav-number">1.0.0.6.1.</span> <span class="nav-text">枚举：（值传递，值类型内部方法要修改内部成员要加mutating关键字）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结构体：（值传递，值类型内部方法要修改内部成员要加mutating关键字）"><span class="nav-number">1.0.0.6.2.</span> <span class="nav-text">结构体：（值传递，值类型内部方法要修改内部成员要加mutating关键字）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#类："><span class="nav-number">1.0.0.6.3.</span> <span class="nav-text">类：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#属性："><span class="nav-number">1.0.0.7.</span> <span class="nav-text">属性：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#面向对象："><span class="nav-number">1.0.0.8.</span> <span class="nav-text">面向对象：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#继承：override重写-final-防止重写"><span class="nav-number">1.0.0.8.1.</span> <span class="nav-text">继承：override重写 / final 防止重写</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构造："><span class="nav-number">1.0.0.8.2.</span> <span class="nav-text">构造：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#析构：deinit"><span class="nav-number">1.0.0.8.3.</span> <span class="nav-text">析构：deinit</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#可选链：多个？类型构成链，其中任何一个为nil那么整体就nil"><span class="nav-number">1.0.0.8.4.</span> <span class="nav-text">可选链：多个？类型构成链，其中任何一个为nil那么整体就nil</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#自动引用计数（ARC）："><span class="nav-number">1.0.0.8.5.</span> <span class="nav-text">自动引用计数（ARC）：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#类型转换："><span class="nav-number">1.0.0.8.6.</span> <span class="nav-text">类型转换：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#扩展（extension）：向一个已有的类、结构体或枚举类型添加新功能，不能重写"><span class="nav-number">1.0.0.8.7.</span> <span class="nav-text">扩展（extension）：向一个已有的类、结构体或枚举类型添加新功能，不能重写</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#协议："><span class="nav-number">1.0.0.8.8.</span> <span class="nav-text">协议：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#泛型：（数组-字典属于泛型集，泛型类似于函数模版）"><span class="nav-number">1.0.0.8.9.</span> <span class="nav-text">泛型：（数组/字典属于泛型集，泛型类似于函数模版）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#访问控制：（默认的访问级别-internal）"><span class="nav-number">1.0.0.8.10.</span> <span class="nav-text">访问控制：（默认的访问级别 internal）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高级操作"><span class="nav-number">1.0.0.9.</span> <span class="nav-text">高级操作</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gungnir</span>
+</div>
+
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
