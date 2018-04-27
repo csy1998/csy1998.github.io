@@ -7,7 +7,7 @@
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -108,7 +108,7 @@
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fq6t80hw5rj30ij039aa9.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fq6t7yi6ehj30jc03sjrn.jpg">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1fq6t81e1z7j30m4064aax.jpg">
-<meta property="og:updated_time" content="2018-04-27T02:58:53.027Z">
+<meta property="og:updated_time" content="2018-04-27T08:40:05.907Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="swift学习笔记">
 <meta name="twitter:description" content="required修饰符的使用规则 required修饰符只能用于修饰类初始化方法。 当子类含有异于父类的初始化方法时（初始化方法参数类型和数量异于父类），子类必须要实现父类的required初始化方法，并且也要使用required修饰符而不是override。 当子类没有初始化方法时，可以不用实现父类的required初始化方法。  enum和struct为值类型，而class为引用类型。值类型内">
@@ -121,7 +121,7 @@
   var CONFIG = {
     root: '/',
     scheme: 'Mist',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
     motion: true,
     duoshuo: {
@@ -146,7 +146,7 @@
 
 
 
-  <title>swift学习笔记 | Gungnir</title>
+  <title>swift学习笔记 | Gungnir</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -172,7 +172,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail ">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -491,8 +491,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/27/10_活着/" rel="prev" title="活着">
-                活着 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/04/27/Test/" rel="prev" title="Test">
+                Test <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -565,7 +565,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -578,7 +578,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -613,6 +613,15 @@
                     <i class="fa fa-fw fa-globe"></i>
                   
                   DouBan
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://csy1998.com/atom.xml" target="_blank" title="RSS">
+                  
+                    <i class="fa fa-fw fa-rss"></i>
+                  
+                  RSS
                 </a>
               </span>
             
@@ -817,6 +826,45 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
 
   
 
