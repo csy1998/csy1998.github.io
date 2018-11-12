@@ -1,0 +1,1090 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="NLP," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Gungnir" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="NLP论文笔记1.Sequence to Sequence Learning with Neural Networks encoder以及decoder都采用LSTM模型 模型很简单，就是最普通的多层LSTM 实现的不同之处：  用两种不同的LSTM，一种处理输入序列，一种处理输出序列；以可忽略的计算成本增加参数数量，同时在多个语言对上训练LSTM； 更深的LSTM会比浅的效果更好，故论文模型选择">
+<meta name="keywords" content="NLP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NLP论文笔记">
+<meta property="og:url" content="csy1998.com/2018/11/12/16_NLP论文笔记/index.html">
+<meta property="og:site_name" content="Gungnir">
+<meta property="og:description" content="NLP论文笔记1.Sequence to Sequence Learning with Neural Networks encoder以及decoder都采用LSTM模型 模型很简单，就是最普通的多层LSTM 实现的不同之处：  用两种不同的LSTM，一种处理输入序列，一种处理输出序列；以可忽略的计算成本增加参数数量，同时在多个语言对上训练LSTM； 更深的LSTM会比浅的效果更好，故论文模型选择">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fwlx2k8vilj30l003aq32.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fwmltl8t76j30lm0nxq5u.jpg">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=w+%3D+%28w_1%2C...%2Cw_n+%29">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=p+%3D%28p_1%2C...%2Cp_n%29">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=e%3D%28w_1%2Bp_1%2C...%2Cw_n%2Bp_n%29">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=W%5E%7Bkd%2A2d%7D">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=Y+%3D%5BA%2CB%5D%5Cin+R%5E%7B2d%7D">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=v%28%5BA%2CB%5D%29+%3D+A+%5Cotimes+++%5Cdelta%28B%29">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=h%5El_i+%3Dv%28W%5El%5Bh%5E%7Bl-1%7D_%7Bi-k%2F2%7D+%2C...%2Ch%5E%7Bl-1%7D_%7Bi%2Bk%2F2%7D+%5D%2Bb%5El+%29%2Bh%5E%7Bl-1%7D_i">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fx5kqwnp5rj30r80bc3zm.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fx5krb5bgyj30bu0cy0tg.jpg">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=p%28y_%7Bi%2B1%7D%7Cy_1%2C+.+.+.+%2C+y_i%2C+x%29+%3D+softmax%28W_o+h%5EL_i+%2B+b_o%29+">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=h_i">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=a_%7Bij%7D%5El">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=c_i">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=c_i">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=h_i">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=h_i">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fx5ksy5f7zj309c0223yi.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fx5kt6ud1ij30b803caa9.jpg">
+<meta property="og:image" content="https://jalammar.github.io/images/t/The_transformer_encoders_decoders.png">
+<meta property="og:image" content="https://jalammar.github.io/images/t/The_transformer_encoder_decoder_stack.png">
+<meta property="og:image" content="https://jalammar.github.io/images/t/Transformer_decoder.png">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fwmm6219jaj30rs0f241f.jpg">
+<meta property="og:image" content="https://jalammar.github.io/images/t/transformer_self_attention_vectors.png">
+<meta property="og:image" content="https://jalammar.github.io/images/t/transformer_self_attention_score.png">
+<meta property="og:image" content="https://jalammar.github.io/images/t/self-attention_softmax.png">
+<meta property="og:image" content="https://jalammar.github.io/images/t/self-attention-output.png">
+<meta property="og:image" content="https://jalammar.github.io/images/t/self-attention-matrix-calculation.png">
+<meta property="og:image" content="https://jalammar.github.io/images/t/self-attention-matrix-calculation-2.png">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=Attention%28Q%2CK%2CV%29+%3D+softmax%28%5Cfrac%7BQK%5ET%7D%7B%5Csqrt%7Bd_k%7D%7D%29V+">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fwmqnxii0jj30go0epjrq.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fwmqp4hpkrj30go0f2mxf.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fwmqqco07mj30go0f30t8.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fwmquw2pb3j30go08ymxt.jpg">
+<meta property="og:image" content="https://jalammar.github.io/images/t/transformer_attention_heads_z.png">
+<meta property="og:image" content="https://jalammar.github.io/images/t/transformer_attention_heads_weight_matrix_o.png">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fwmr6op8e8j30uc17u7et.jpg">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=n%5Ctimes+d_%7Bmodel%7D">
+<meta property="og:image" content="http://www.zhihu.com/equation?tex=d_%7Bmodel%7D">
+<meta property="og:updated_time" content="2018-11-12T13:02:18.209Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NLP论文笔记">
+<meta name="twitter:description" content="NLP论文笔记1.Sequence to Sequence Learning with Neural Networks encoder以及decoder都采用LSTM模型 模型很简单，就是最普通的多层LSTM 实现的不同之处：  用两种不同的LSTM，一种处理输入序列，一种处理输出序列；以可忽略的计算成本增加参数数量，同时在多个语言对上训练LSTM； 更深的LSTM会比浅的效果更好，故论文模型选择">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fwlx2k8vilj30l003aq32.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="csy1998.com/2018/11/12/16_NLP论文笔记/"/>
+
+
+
+
+
+  <title>NLP论文笔记 | Gungnir</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Gungnir</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">临渊羡鱼，不如退而结网</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="csy1998.com/2018/11/12/16_NLP论文笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Gungnir">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/my_lover.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gungnir">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">NLP论文笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-12T00:00:00+08:00">
+                2018-11-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/11/12/16_NLP论文笔记/" class="leancloud_visitors" data-flag-title="NLP论文笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="NLP论文笔记"><a href="#NLP论文笔记" class="headerlink" title="NLP论文笔记"></a>NLP论文笔记</h3><h6 id="1-Sequence-to-Sequence-Learning-with-Neural-Networks"><a href="#1-Sequence-to-Sequence-Learning-with-Neural-Networks" class="headerlink" title="1.Sequence to Sequence Learning with Neural Networks"></a>1.Sequence to Sequence Learning with Neural Networks</h6><ul>
+<li><code>encoder</code>以及<code>decoder</code>都采用<code>LSTM</code>模型</li>
+<li>模型很简单，就是最普通的多层<code>LSTM</code></li>
+<li><p>实现的不同之处：</p>
+<ul>
+<li>用两种不同的<code>LSTM</code>，一种处理输入序列，一种处理输出序列；以可忽略的计算成本增加参数数量，同时在多个语言对上训练<code>LSTM</code>；</li>
+<li>更深的<code>LSTM</code>会比浅的效果更好，故论文模型选择了四层；</li>
+<li>将输入的序列翻转之后作为输入效果提升；</li>
+</ul>
+</li>
+<li><p><code>decoder</code>应用了beam search来提升效果（每次生成词是取使得整个概率最高的前k个词作为候选）；beam size越大，效果越好，同时计算代价增大；</p>
+</li>
+<li><p>关于倒序输入效果提升：<code>rnn</code>是有偏模型，顺序越靠后的单词在最终占据的信息量越大，正序时最后一个词对应的state作为<code>decoder</code>的输入来预测第一个词，在<code>alignment</code>上来看显然这两个词并不是对齐的；倒序的话，<code>first word</code>成了<code>last word</code>，在<code>last state</code>中占据了主导，来预测<code>decoder</code>的第一个词，从某种意义上说实现了<code>alignment</code>，故效果提升。</p>
+</li>
+<li><p><code>decoder</code>本质上是一个<code>rnn</code>语言模型，不同的是在生成词的时候依赖于<code>encoder</code>的最后一个<code>hidden state</code>：</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwlx2k8vilj30l003aq32.jpg" alt=""></p>
+</li>
+<li><h6 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h6><h6 id="Sequence-to-Sequence-Learning-with-Neural-Networks"><a href="#Sequence-to-Sequence-Learning-with-Neural-Networks" class="headerlink" title="Sequence to Sequence Learning with Neural Networks"></a>Sequence to Sequence Learning with Neural Networks</h6><h6 id="https-zhuanlan-zhihu-com-p-26985192"><a href="#https-zhuanlan-zhihu-com-p-26985192" class="headerlink" title="https://zhuanlan.zhihu.com/p/26985192"></a><a href="https://zhuanlan.zhihu.com/p/26985192" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/26985192</a></h6></li>
+</ul>
+<h6 id="2-Convolutional-Sequence-to-Sequence-Learning"><a href="#2-Convolutional-Sequence-to-Sequence-Learning" class="headerlink" title="2.Convolutional Sequence to Sequence Learning"></a>2.Convolutional Sequence to Sequence Learning</h6><ul>
+<li><p>Seq2Seq 先把语句转换为一组词向量，通过对词向量的剪辑，提炼出语义向量。但对于如何剪辑有争议。有人提议使用<code>LSTM</code>等循环模型（RNN），来实现语义剪辑。RNN 模型的剪辑手段是：记忆门、遗忘门、和输出门。</p>
+</li>
+<li><p>RNN 模型的突出优势，是很好地解决了长距离依赖的难题；</p>
+</li>
+<li><p>作者使用<code>CNN</code>取代<code>RNN</code>循环模型，训练速度提高9倍，精度超越<code>RNN</code>；</p>
+</li>
+<li><p><strong>为什么更快？</strong></p>
+<ul>
+<li>卷积并行处理，而循环只能顺序处理，多个机器同时并行训练卷积模型，速度比串行训练循环模型快很多；</li>
+<li>可用<code>GPU</code>芯片来加速卷积模型的训练，而暂时还没有硬件能够加速<code>RNN</code>的训练；</li>
+</ul>
+</li>
+<li><p><strong>为什么更准？</strong></p>
+<ul>
+<li><code>CNN</code>的层层抽象，与<code>RNN</code>的三重门，其实异曲同工。虽手段不同，但目的都是忽略次要内容，传承重要内容。所以在精度方面二者差距不大； </li>
+<li>但是层级结构与循环网络链结构相比，提供了一种较短的路径来捕获词之间远程的依赖关系，因此也可以更好地捕捉更复杂的关系；</li>
+<li><code>Facebook translate</code> 与<code>Google translate</code>的精度差异，应该是由于<code>attention</code>的改进引起的；<ul>
+<li><code>Google Translate</code>的解码器使用单层<code>LSTM</code>模型，故<code>attention</code>也是单层的；<code>Facebook</code>的解码器使用<code>CNN</code>模型，是多层的，<code>attention</code> 是多跳的（multi-hop）；越是底层的<code>attention</code>越聚焦，细节越丰富；越是高层的<code>attention</code>，视野越开阔，抽象程度越高，越能抓住文章主旨；</li>
+<li><code>Google Translate</code>使用的<code>attention</code>，依赖于编码器生成的语义向量，而不依赖于输入的原生态的词向量。而<code>Facebook</code>的<code>attention</code>，对语义向量和原生态词向量兼收并取；语义向量负责把握主旨，保证解码器的输出不偏题；原生态词向量关注措辞，保障解码器的输出用词得当；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>将来<code>attention</code>的机制，还得融入规则。论文里只理解字面意思的<code>attention</code>的计算方式，无法理解“画外音”、“引经据典”、“含沙射影”的联想型语句。要正确理解“引经据典”和“含沙射影”，将来<code>attention</code>机制，还得融入知识图谱（张俊的猜想）；</p>
+</li>
+<li><p>模型结构：<code>encoder-decoder</code> +<code>attention</code>模块</p>
+<ul>
+<li>encoder 和 decoder采用了相同的卷积结构</li>
+<li>非线性部分采用门控结构<code>GLM</code>；</li>
+<li><code>attention</code>采用多跳注意<code>multi-hop attention</code>，即在<code>decoder</code>的每一个卷积层都会进行<code>attention</code>操作，并将结果输入到下一层；</li>
+</ul>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fwmltl8t76j30lm0nxq5u.jpg" alt=""></p>
+</li>
+<li><p>步骤：</p>
+<ul>
+<li><p><strong>1.Position Embeddings</strong></p>
+<ul>
+<li><p>词向量：<img src="http://www.zhihu.com/equation?tex=w+%3D+%28w_1%2C...%2Cw_n+%29" alt="w = (w_1,...,w_n )"></p>
+<p>位置向量：<img src="http://www.zhihu.com/equation?tex=p+%3D%28p_1%2C...%2Cp_n%29" alt="p =(p_1,...,p_n)"></p>
+<p>最终表示向量：(输入表示向量)<img src="http://www.zhihu.com/equation?tex=e%3D%28w_1%2Bp_1%2C...%2Cw_n%2Bp_n%29" alt="e=(w_1+p_1,...,w_n+p_n)"> （输出表示向量g)</p>
+</li>
+</ul>
+</li>
+<li><p><strong>2、Convolutional Block Structure</strong></p>
+<ul>
+<li><p>一次“卷积计算+非线性计算”看作一个单元<code>Convolutional Block</code>，单元在一个卷积层内共享；</p>
+</li>
+<li><p><strong>卷积计算：</strong>卷积核的大小为<img src="http://www.zhihu.com/equation?tex=W%5E%7Bkd%2A2d%7D" alt="W^{kd*2d}">，d为词向量长度，k为卷积窗口大小，每次卷积生成两列d维向量<img src="http://www.zhihu.com/equation?tex=Y+%3D%5BA%2CB%5D%5Cin+R%5E%7B2d%7D" alt="Y =[A,B]\in R^{2d}">；</p>
+</li>
+<li><p><strong>非线性计算：</strong>门控结构<code>GLM</code><img src="http://www.zhihu.com/equation?tex=v%28%5BA%2CB%5D%29+%3D+A+%5Cotimes+++%5Cdelta%28B%29" alt="v([A,B]) = A \otimes   \delta(B)"></p>
+</li>
+<li><p><strong>残差连接：</strong>把输入与输出相加，输入到下一层网络中。</p>
+<p><img src="http://www.zhihu.com/equation?tex=h%5El_i+%3Dv%28W%5El%5Bh%5E%7Bl-1%7D_%7Bi-k%2F2%7D+%2C...%2Ch%5E%7Bl-1%7D_%7Bi%2Bk%2F2%7D+%5D%2Bb%5El+%29%2Bh%5E%7Bl-1%7D_i" alt="h^l_i =v(W^l[h^{l-1}_{i-k/2} ,...,h^{l-1}_{i+k/2} ]+b^l )+h^{l-1}_i"></p>
+<h6 id="图示：单层Block的情况"><a href="#图示：单层Block的情况" class="headerlink" title="图示：单层Block的情况"></a>图示：单层Block的情况</h6><p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fx5kqwnp5rj30r80bc3zm.jpg" alt=""></p>
+<h6 id="图示：多层block；堆叠后第三层的每个输出都与输入中的7列有关"><a href="#图示：多层block；堆叠后第三层的每个输出都与输入中的7列有关" class="headerlink" title="图示：多层block；堆叠后第三层的每个输出都与输入中的7列有关"></a>图示：多层block；堆叠后第三层的每个输出都与输入中的7列有关</h6><p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fx5krb5bgyj30bu0cy0tg.jpg" alt=""></p>
+</li>
+<li><p><strong>输出：</strong>decoder的最后一层卷积层最后一个单元输出经过softmax得到下一个目标词的概率：</p>
+<p>​                        <img src="http://www.zhihu.com/equation?tex=p%28y_%7Bi%2B1%7D%7Cy_1%2C+.+.+.+%2C+y_i%2C+x%29+%3D+softmax%28W_o+h%5EL_i+%2B+b_o%29+" alt="p(y_{i+1}|y_1, . . . , y_i, x) = softmax(W_o h^L_i + b_o) "></p>
+</li>
+</ul>
+</li>
+<li><p><strong>3、Multi-step Attention</strong></p>
+<ul>
+<li><p>原理与传统的<code>attention</code>相似，权重由<code>decoder</code>的当前输出<img src="http://www.zhihu.com/equation?tex=h_i" alt="h_i">和<code>encoder</code>的所有输出共同决定，利用该权重<img src="http://www.zhihu.com/equation?tex=a_%7Bij%7D%5El" alt="a_{ij}^l">对<code>encoder</code>的输出进行加权，得到表示输入句子信息的向量<img src="http://www.zhihu.com/equation?tex=c_i" alt="c_i">，<img src="http://www.zhihu.com/equation?tex=c_i" alt="c_i">和<img src="http://www.zhihu.com/equation?tex=h_i" alt="h_i">相加组成新的<img src="http://www.zhihu.com/equation?tex=h_i" alt="h_i">；</p>
+<p>​                       <img src="https://ws2.sinaimg.cn/large/006tNbRwly1fx5ksy5f7zj309c0223yi.jpg" alt="">                </p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fx5kt6ud1ij30b803caa9.jpg" alt=""></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>  ![](https://ws3.sinaimg.cn/large/006tNbRwly1fx5ktetzqtj309c03mglo.jpg)
+</code></pre><ul>
+<li><h6 id="参考资料：-1"><a href="#参考资料：-1" class="headerlink" title="参考资料："></a>参考资料：</h6><h6 id="Convolutional-Sequence-to-Sequence-Learning"><a href="#Convolutional-Sequence-to-Sequence-Learning" class="headerlink" title="Convolutional Sequence to Sequence Learning"></a>Convolutional Sequence to Sequence Learning</h6><h6 id="https-zhuanlan-zhihu-com-p-26918935"><a href="#https-zhuanlan-zhihu-com-p-26918935" class="headerlink" title="https://zhuanlan.zhihu.com/p/26918935"></a><a href="https://zhuanlan.zhihu.com/p/26918935" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/26918935</a></h6><h6 id="https-zhuanlan-zhihu-com-p-27464080"><a href="#https-zhuanlan-zhihu-com-p-27464080" class="headerlink" title="https://zhuanlan.zhihu.com/p/27464080"></a><a href="https://zhuanlan.zhihu.com/p/27464080" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/27464080</a></h6></li>
+</ul>
+<h6 id="2-Attention-Is-All-You-Need"><a href="#2-Attention-Is-All-You-Need" class="headerlink" title="2.Attention Is All You Need"></a>2.Attention Is All You Need</h6><ul>
+<li><p>大框架：</p>
+<p><img src="https://jalammar.github.io/images/t/The_transformer_encoders_decoders.png" alt="img"></p>
+<p><img src="https://jalammar.github.io/images/t/The_transformer_encoder_decoder_stack.png" alt="img"></p>
+</li>
+</ul>
+<h6 id="encoder的输出，会和每一层的decoder进行结合"><a href="#encoder的输出，会和每一层的decoder进行结合" class="headerlink" title="encoder的输出，会和每一层的decoder进行结合"></a>encoder的输出，会和每一层的decoder进行结合</h6><p>  <img src="https://jalammar.github.io/images/t/Transformer_decoder.png" alt="img"></p>
+<h6 id="Encoder和Decoder的内部结构"><a href="#Encoder和Decoder的内部结构" class="headerlink" title="Encoder和Decoder的内部结构"></a>Encoder和Decoder的内部结构</h6><ul>
+<li><p>细节：<strong>Multi-Head Attention(Self-Attention) 与 Scaled Dot-Product Attention</strong></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fwmm6219jaj30rs0f241f.jpg" alt=""></p>
+<ul>
+<li><strong>从Scaled Dot-Product Attention到Multi-Head Attention</strong></li>
+</ul>
+</li>
+</ul>
+<p><img src="https://jalammar.github.io/images/t/transformer_self_attention_vectors.png" alt="img"></p>
+<h6 id="输入：两个单词-Thinking-Machines-通过嵌入变换得到X1-X2两个向量-1-x-4-。分别与Wq-Wk-Wv三个矩阵-4x3-点乘得到，-q1-q2-k1-k2-v1-v2-6个向量-1x3-；"><a href="#输入：两个单词-Thinking-Machines-通过嵌入变换得到X1-X2两个向量-1-x-4-。分别与Wq-Wk-Wv三个矩阵-4x3-点乘得到，-q1-q2-k1-k2-v1-v2-6个向量-1x3-；" class="headerlink" title="输入：两个单词(Thinking, Machines)通过嵌入变换得到X1,X2两个向量[1 x 4]。分别与Wq,Wk,Wv三个矩阵[4x3]点乘得到，{q1,q2},{k1,k2},{v1,v2} 6个向量[1x3]；"></a>输入：两个单词(Thinking, Machines)通过嵌入变换得到X1,X2两个向量[1 x 4]。分别与Wq,Wk,Wv三个矩阵[4x3]点乘得到，{q1,q2},{k1,k2},{v1,v2} 6个向量[1x3]；</h6><p><img src="https://jalammar.github.io/images/t/transformer_self_attention_score.png" alt="img"></p>
+<h6 id="向量-q1-k1-做点乘得到得分-Score-112，-q1-k2-做点乘得到得分96；"><a href="#向量-q1-k1-做点乘得到得分-Score-112，-q1-k2-做点乘得到得分96；" class="headerlink" title="向量{q1,k1}做点乘得到得分(Score) 112，{q1,k2}做点乘得到得分96；"></a>向量{q1,k1}做点乘得到得分(Score) 112，{q1,k2}做点乘得到得分96；</h6><p><img src="https://jalammar.github.io/images/t/self-attention_softmax.png" alt="img"></p>
+<h6 id="对该得分进行规范-除以8-。论文解释是为了使得梯度更稳定（工程问题没什么好解释的）；之后对得分『14，12』做softmax得到比例『0-88，0-12』；"><a href="#对该得分进行规范-除以8-。论文解释是为了使得梯度更稳定（工程问题没什么好解释的）；之后对得分『14，12』做softmax得到比例『0-88，0-12』；" class="headerlink" title="对该得分进行规范(除以8)。论文解释是为了使得梯度更稳定（工程问题没什么好解释的）；之后对得分『14，12』做softmax得到比例『0.88，0.12』；"></a>对该得分进行规范(除以8)。论文解释是为了使得梯度更稳定（工程问题没什么好解释的）；之后对得分『14，12』做softmax得到比例『0.88，0.12』；</h6><p><img src="https://jalammar.github.io/images/t/self-attention-output.png" alt="img"></p>
+<h6 id="得分比例「0-88-0-12」乘-v1-v2-值-Values-得到一个加权后的值，加起来得到z1就是这一层的输出。用Q-K去计算一个thinking对与-thinking-machine-的权重，用权重乘以-thinking-machine-的V得到加权后的-thinking-machine-的V-最后求和得到针对各单词的输出Z；"><a href="#得分比例「0-88-0-12」乘-v1-v2-值-Values-得到一个加权后的值，加起来得到z1就是这一层的输出。用Q-K去计算一个thinking对与-thinking-machine-的权重，用权重乘以-thinking-machine-的V得到加权后的-thinking-machine-的V-最后求和得到针对各单词的输出Z；" class="headerlink" title="得分比例「0.88 0.12」乘[v1 v2]值(Values)得到一个加权后的值，加起来得到z1就是这一层的输出。用Q,K去计算一个thinking对与[thinking, machine]的权重，用权重乘以[thinking,machine]的V得到加权后的[thinking,machine]的V,最后求和得到针对各单词的输出Z；"></a>得分比例「0.88 0.12」乘[v1 v2]值(Values)得到一个加权后的值，加起来得到z1就是这一层的输出。用Q,K去计算一个thinking对与[thinking, machine]的权重，用权重乘以[thinking,machine]的V得到加权后的[thinking,machine]的V,最后求和得到针对各单词的输出Z；</h6><p><img src="https://jalammar.github.io/images/t/self-attention-matrix-calculation.png" alt="img"></p>
+<h6 id="展示矩阵运算的例子：输入是一个-2x4-的矩阵（单词嵌入），每个运算是-4x3-的矩阵，求得Q-K-V；"><a href="#展示矩阵运算的例子：输入是一个-2x4-的矩阵（单词嵌入），每个运算是-4x3-的矩阵，求得Q-K-V；" class="headerlink" title="展示矩阵运算的例子：输入是一个[2x4]的矩阵（单词嵌入），每个运算是[4x3]的矩阵，求得Q,K,V；"></a>展示矩阵运算的例子：输入是一个[2x4]的矩阵（单词嵌入），每个运算是[4x3]的矩阵，求得Q,K,V；</h6><p><img src="https://jalammar.github.io/images/t/self-attention-matrix-calculation-2.png" alt="img"></p>
+<h6 id="Z是一个考虑过thinking周围单词-machine-的输出；"><a href="#Z是一个考虑过thinking周围单词-machine-的输出；" class="headerlink" title="Z是一个考虑过thinking周围单词(machine)的输出；"></a>Z是一个考虑过thinking周围单词(machine)的输出；</h6><p><img src="http://www.zhihu.com/equation?tex=Attention%28Q%2CK%2CV%29+%3D+softmax%28%5Cfrac%7BQK%5ET%7D%7B%5Csqrt%7Bd_k%7D%7D%29V+" alt="Attention(Q,K,V) = softmax(\frac{QK^T}{\sqrt{d_k}})V "></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwmqnxii0jj30go0epjrq.jpg" alt=""></p>
+<h6 id="Q·K-T其实就会组成一个-word2word-的-attention-map-每一个单词就对应每一个单词有一个权重，encoder里面是叫self-attention，decoder里面是叫masked-self-attention；"><a href="#Q·K-T其实就会组成一个-word2word-的-attention-map-每一个单词就对应每一个单词有一个权重，encoder里面是叫self-attention，decoder里面是叫masked-self-attention；" class="headerlink" title="Q·K.T其实就会组成一个 word2word 的 attention map ,每一个单词就对应每一个单词有一个权重，encoder里面是叫self-attention，decoder里面是叫masked self-attention；"></a>Q·K.T其实就会组成一个 word2word 的 attention map ,每一个单词就对应每一个单词有一个权重，encoder里面是叫self-attention，decoder里面是叫masked self-attention；</h6><p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fwmqp4hpkrj30go0f2mxf.jpg" alt=""></p>
+<h6 id="masked就是要在做language-modelling（或者像翻译）的时候，沿着对角线把灰色的区域用0覆盖掉，不给模型看到未来的信息；"><a href="#masked就是要在做language-modelling（或者像翻译）的时候，沿着对角线把灰色的区域用0覆盖掉，不给模型看到未来的信息；" class="headerlink" title="masked就是要在做language modelling（或者像翻译）的时候，沿着对角线把灰色的区域用0覆盖掉，不给模型看到未来的信息；"></a>masked就是要在做language modelling（或者像翻译）的时候，沿着对角线把灰色的区域用0覆盖掉，不给模型看到未来的信息；</h6><p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwmqqco07mj30go0f30t8.jpg" alt=""></p>
+<h6 id="softmax后就横轴合为1"><a href="#softmax后就横轴合为1" class="headerlink" title="softmax后就横轴合为1"></a>softmax后就横轴合为1</h6><p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fwmquw2pb3j30go08ymxt.jpg" alt=""></p>
+<h6 id="self-attention的一个问题：若输入句子很长，NxN的attention-map会导致内存爆炸。则应该减少batch-size多gpu训练，或剪断输入的长度，或是用conv对K-V做卷积减少长度；"><a href="#self-attention的一个问题：若输入句子很长，NxN的attention-map会导致内存爆炸。则应该减少batch-size多gpu训练，或剪断输入的长度，或是用conv对K-V做卷积减少长度；" class="headerlink" title="self-attention的一个问题：若输入句子很长，NxN的attention map会导致内存爆炸。则应该减少batch size多gpu训练，或剪断输入的长度，或是用conv对K,V做卷积减少长度；"></a>self-attention的一个问题：若输入句子很长，NxN的attention map会导致内存爆炸。则应该减少batch size多gpu训练，或剪断输入的长度，或是用conv对K,V做卷积减少长度；</h6><p>​    <img src="https://jalammar.github.io/images/t/transformer_attention_heads_z.png" alt="img"></p>
+<h6 id="Multi-Head-Attention就是把上面的过程做H次，然后把输出Z合起来；"><a href="#Multi-Head-Attention就是把上面的过程做H次，然后把输出Z合起来；" class="headerlink" title="Multi-Head Attention就是把上面的过程做H次，然后把输出Z合起来；"></a>Multi-Head Attention就是把上面的过程做H次，然后把输出Z合起来；</h6><p><img src="https://jalammar.github.io/images/t/transformer_attention_heads_weight_matrix_o.png" alt="img"></p>
+<h6 id="为了使得输出与输入结构对称，乘一个线性W0得到Z"><a href="#为了使得输出与输入结构对称，乘一个线性W0得到Z" class="headerlink" title="为了使得输出与输入结构对称，乘一个线性W0得到Z"></a>为了使得输出与输入结构对称，乘一个线性W0得到Z</h6><ul>
+<li><p><strong>Transformer</strong>的结构：</p>
+<ul>
+<li><strong>Transformer</strong>：由一个<code>encoder</code>, 一个<code>decoder</code>，一个<code>decoder</code>后的输出层<code>generator</code>，外加2个嵌入层<code>embedding</code>组成；</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fwmr6op8e8j30uc17u7et.jpg" alt=""></p>
+<ul>
+<li><strong>Encoder</strong>层的结构：共N层，<code>add&amp;norm</code>就是一个简单的<code>layer normalization</code>外加残差网络的结合；</li>
+<li><strong>Decoder</strong>层的结构：共N层；</li>
+<li><strong>Generator</strong>：前向网络<code>Linear</code> + <code>softmax</code></li>
+<li>关于<strong>Feed Forward</strong>：该网络的输入大小是可变的<img src="http://www.zhihu.com/equation?tex=n%5Ctimes+d_%7Bmodel%7D" alt="n\times d_{model}">（model可变），于是就独立作用在输入矩阵的每一列上的（<code>separately and identically</code>），其输入与输出都是<img src="http://www.zhihu.com/equation?tex=d_%7Bmodel%7D" alt="d_{model}">维的向量；</li>
+</ul>
+</li>
+<li><p>优点：</p>
+<ul>
+<li><p>靠<code>attention</code>机制，不使用<code>RNN</code>和<code>CNN</code>，并行度高；</p>
+</li>
+<li><p>提出<code>self-attention</code>，自己和自己做<code>attention</code>，使得每个词都有全局的语义信息（长依赖）：由于<code>Self-Attention</code>是每个词和所有词都要计算<code>Attention</code>，所以不管他们中间有多长距离，最大的路径长度也都只是1，可以捕获长距离依赖关系；</p>
+</li>
+<li><p>提出<code>multi-head attention</code>，可以看成<code>attention</code>的<code>ensemble</code>版本，不同<code>head</code>学习不同的子空间语义；</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><h6 id="参考资料：-2"><a href="#参考资料：-2" class="headerlink" title="参考资料："></a>参考资料：</h6><h6 id="Attention-Is-All-You-Need"><a href="#Attention-Is-All-You-Need" class="headerlink" title="Attention Is All You Need"></a>Attention Is All You Need</h6><h6 id="https-jalammar-github-io-illustrated-transformer"><a href="#https-jalammar-github-io-illustrated-transformer" class="headerlink" title="https://jalammar.github.io/illustrated-transformer/"></a><a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" rel="external">https://jalammar.github.io/illustrated-transformer/</a></h6><h6 id="https-zhuanlan-zhihu-com-p-39034683"><a href="#https-zhuanlan-zhihu-com-p-39034683" class="headerlink" title="https://zhuanlan.zhihu.com/p/39034683"></a><a href="https://zhuanlan.zhihu.com/p/39034683" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/39034683</a></h6></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NLP/" rel="tag"># NLP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/12/12_JavaScript学习/" rel="next" title="JavaScript学习">
+                <i class="fa fa-chevron-left"></i> JavaScript学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/my_lover.png"
+               alt="Gungnir" />
+          <p class="site-author-name" itemprop="name">Gungnir</p>
+           
+              <p class="site-description motion-element" itemprop="description">What you want decide where you go</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/csy1998" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/151765782/" target="_blank" title="DouBan">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  DouBan
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://csy1998.com/atom.xml" target="_blank" title="RSS">
+                  
+                    <i class="fa fa-fw fa-rss"></i>
+                  
+                  RSS
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#NLP论文笔记"><span class="nav-number">1.</span> <span class="nav-text">NLP论文笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-Sequence-to-Sequence-Learning-with-Neural-Networks"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">1.Sequence to Sequence Learning with Neural Networks</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#参考资料："><span class="nav-number">1.0.0.2.</span> <span class="nav-text">参考资料：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Sequence-to-Sequence-Learning-with-Neural-Networks"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">Sequence to Sequence Learning with Neural Networks</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#https-zhuanlan-zhihu-com-p-26985192"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">https://zhuanlan.zhihu.com/p/26985192</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-Convolutional-Sequence-to-Sequence-Learning"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">2.Convolutional Sequence to Sequence Learning</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#图示：单层Block的情况"><span class="nav-number">1.0.0.6.</span> <span class="nav-text">图示：单层Block的情况</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#图示：多层block；堆叠后第三层的每个输出都与输入中的7列有关"><span class="nav-number">1.0.0.7.</span> <span class="nav-text">图示：多层block；堆叠后第三层的每个输出都与输入中的7列有关</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#参考资料：-1"><span class="nav-number">1.0.0.8.</span> <span class="nav-text">参考资料：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Convolutional-Sequence-to-Sequence-Learning"><span class="nav-number">1.0.0.9.</span> <span class="nav-text">Convolutional Sequence to Sequence Learning</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#https-zhuanlan-zhihu-com-p-26918935"><span class="nav-number">1.0.0.10.</span> <span class="nav-text">https://zhuanlan.zhihu.com/p/26918935</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#https-zhuanlan-zhihu-com-p-27464080"><span class="nav-number">1.0.0.11.</span> <span class="nav-text">https://zhuanlan.zhihu.com/p/27464080</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-Attention-Is-All-You-Need"><span class="nav-number">1.0.0.12.</span> <span class="nav-text">2.Attention Is All You Need</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#encoder的输出，会和每一层的decoder进行结合"><span class="nav-number">1.0.0.13.</span> <span class="nav-text">encoder的输出，会和每一层的decoder进行结合</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Encoder和Decoder的内部结构"><span class="nav-number">1.0.0.14.</span> <span class="nav-text">Encoder和Decoder的内部结构</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#输入：两个单词-Thinking-Machines-通过嵌入变换得到X1-X2两个向量-1-x-4-。分别与Wq-Wk-Wv三个矩阵-4x3-点乘得到，-q1-q2-k1-k2-v1-v2-6个向量-1x3-；"><span class="nav-number">1.0.0.15.</span> <span class="nav-text">输入：两个单词(Thinking, Machines)通过嵌入变换得到X1,X2两个向量[1 x 4]。分别与Wq,Wk,Wv三个矩阵[4x3]点乘得到，{q1,q2},{k1,k2},{v1,v2} 6个向量[1x3]；</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#向量-q1-k1-做点乘得到得分-Score-112，-q1-k2-做点乘得到得分96；"><span class="nav-number">1.0.0.16.</span> <span class="nav-text">向量{q1,k1}做点乘得到得分(Score) 112，{q1,k2}做点乘得到得分96；</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#对该得分进行规范-除以8-。论文解释是为了使得梯度更稳定（工程问题没什么好解释的）；之后对得分『14，12』做softmax得到比例『0-88，0-12』；"><span class="nav-number">1.0.0.17.</span> <span class="nav-text">对该得分进行规范(除以8)。论文解释是为了使得梯度更稳定（工程问题没什么好解释的）；之后对得分『14，12』做softmax得到比例『0.88，0.12』；</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#得分比例「0-88-0-12」乘-v1-v2-值-Values-得到一个加权后的值，加起来得到z1就是这一层的输出。用Q-K去计算一个thinking对与-thinking-machine-的权重，用权重乘以-thinking-machine-的V得到加权后的-thinking-machine-的V-最后求和得到针对各单词的输出Z；"><span class="nav-number">1.0.0.18.</span> <span class="nav-text">得分比例「0.88 0.12」乘[v1 v2]值(Values)得到一个加权后的值，加起来得到z1就是这一层的输出。用Q,K去计算一个thinking对与[thinking, machine]的权重，用权重乘以[thinking,machine]的V得到加权后的[thinking,machine]的V,最后求和得到针对各单词的输出Z；</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#展示矩阵运算的例子：输入是一个-2x4-的矩阵（单词嵌入），每个运算是-4x3-的矩阵，求得Q-K-V；"><span class="nav-number">1.0.0.19.</span> <span class="nav-text">展示矩阵运算的例子：输入是一个[2x4]的矩阵（单词嵌入），每个运算是[4x3]的矩阵，求得Q,K,V；</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Z是一个考虑过thinking周围单词-machine-的输出；"><span class="nav-number">1.0.0.20.</span> <span class="nav-text">Z是一个考虑过thinking周围单词(machine)的输出；</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Q·K-T其实就会组成一个-word2word-的-attention-map-每一个单词就对应每一个单词有一个权重，encoder里面是叫self-attention，decoder里面是叫masked-self-attention；"><span class="nav-number">1.0.0.21.</span> <span class="nav-text">Q·K.T其实就会组成一个 word2word 的 attention map ,每一个单词就对应每一个单词有一个权重，encoder里面是叫self-attention，decoder里面是叫masked self-attention；</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#masked就是要在做language-modelling（或者像翻译）的时候，沿着对角线把灰色的区域用0覆盖掉，不给模型看到未来的信息；"><span class="nav-number">1.0.0.22.</span> <span class="nav-text">masked就是要在做language modelling（或者像翻译）的时候，沿着对角线把灰色的区域用0覆盖掉，不给模型看到未来的信息；</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#softmax后就横轴合为1"><span class="nav-number">1.0.0.23.</span> <span class="nav-text">softmax后就横轴合为1</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#self-attention的一个问题：若输入句子很长，NxN的attention-map会导致内存爆炸。则应该减少batch-size多gpu训练，或剪断输入的长度，或是用conv对K-V做卷积减少长度；"><span class="nav-number">1.0.0.24.</span> <span class="nav-text">self-attention的一个问题：若输入句子很长，NxN的attention map会导致内存爆炸。则应该减少batch size多gpu训练，或剪断输入的长度，或是用conv对K,V做卷积减少长度；</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Multi-Head-Attention就是把上面的过程做H次，然后把输出Z合起来；"><span class="nav-number">1.0.0.25.</span> <span class="nav-text">Multi-Head Attention就是把上面的过程做H次，然后把输出Z合起来；</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#为了使得输出与输入结构对称，乘一个线性W0得到Z"><span class="nav-number">1.0.0.26.</span> <span class="nav-text">为了使得输出与输入结构对称，乘一个线性W0得到Z</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#参考资料：-2"><span class="nav-number">1.0.0.27.</span> <span class="nav-text">参考资料：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Attention-Is-All-You-Need"><span class="nav-number">1.0.0.28.</span> <span class="nav-text">Attention Is All You Need</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#https-jalammar-github-io-illustrated-transformer"><span class="nav-number">1.0.0.29.</span> <span class="nav-text">https://jalammar.github.io/illustrated-transformer/</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#https-zhuanlan-zhihu-com-p-39034683"><span class="nav-number">1.0.0.30.</span> <span class="nav-text">https://zhuanlan.zhihu.com/p/39034683</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gungnir</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("p3unXHkcVtKXEU5NWC2SAEOf-gzGzoHsz", "ldsq2UnhBYf5epuTOSyPbUAz");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

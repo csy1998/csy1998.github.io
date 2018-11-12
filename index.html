@@ -269,6 +269,301 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="csy1998.com/2018/11/12/16_NLP论文笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Gungnir">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/my_lover.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gungnir">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/12/16_NLP论文笔记/" itemprop="url">NLP论文笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-12T00:00:00+08:00">
+                2018-11-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/11/12/16_NLP论文笔记/" class="leancloud_visitors" data-flag-title="NLP论文笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="NLP论文笔记"><a href="#NLP论文笔记" class="headerlink" title="NLP论文笔记"></a>NLP论文笔记</h3><h6 id="1-Sequence-to-Sequence-Learning-with-Neural-Networks"><a href="#1-Sequence-to-Sequence-Learning-with-Neural-Networks" class="headerlink" title="1.Sequence to Sequence Learning with Neural Networks"></a>1.Sequence to Sequence Learning with Neural Networks</h6><ul>
+<li><code>encoder</code>以及<code>decoder</code>都采用<code>LSTM</code>模型</li>
+<li>模型很简单，就是最普通的多层<code>LSTM</code></li>
+<li><p>实现的不同之处：</p>
+<ul>
+<li>用两种不同的<code>LSTM</code>，一种处理输入序列，一种处理输出序列；以可忽略的计算成本增加参数数量，同时在多个语言对上训练<code>LSTM</code>；</li>
+<li>更深的<code>LSTM</code>会比浅的效果更好，故论文模型选择了四层；</li>
+<li>将输入的序列翻转之后作为输入效果提升；</li>
+</ul>
+</li>
+<li><p><code>decoder</code>应用了beam search来提升效果（每次生成词是取使得整个概率最高的前k个词作为候选）；beam size越大，效果越好，同时计算代价增大；</p>
+</li>
+<li><p>关于倒序输入效果提升：<code>rnn</code>是有偏模型，顺序越靠后的单词在最终占据的信息量越大，正序时最后一个词对应的state作为<code>decoder</code>的输入来预测第一个词，在<code>alignment</code>上来看显然这两个词并不是对齐的；倒序的话，<code>first word</code>成了<code>last word</code>，在<code>last state</code>中占据了主导，来预测<code>decoder</code>的第一个词，从某种意义上说实现了<code>alignment</code>，故效果提升。</p>
+</li>
+<li><p><code>decoder</code>本质上是一个<code>rnn</code>语言模型，不同的是在生成词的时候依赖于<code>encoder</code>的最后一个<code>hidden state</code>：</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwlx2k8vilj30l003aq32.jpg" alt=""></p>
+</li>
+<li><h6 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h6><h6 id="Sequence-to-Sequence-Learning-with-Neural-Networks"><a href="#Sequence-to-Sequence-Learning-with-Neural-Networks" class="headerlink" title="Sequence to Sequence Learning with Neural Networks"></a>Sequence to Sequence Learning with Neural Networks</h6><h6 id="https-zhuanlan-zhihu-com-p-26985192"><a href="#https-zhuanlan-zhihu-com-p-26985192" class="headerlink" title="https://zhuanlan.zhihu.com/p/26985192"></a><a href="https://zhuanlan.zhihu.com/p/26985192" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/26985192</a></h6></li>
+</ul>
+<h6 id="2-Convolutional-Sequence-to-Sequence-Learning"><a href="#2-Convolutional-Sequence-to-Sequence-Learning" class="headerlink" title="2.Convolutional Sequence to Sequence Learning"></a>2.Convolutional Sequence to Sequence Learning</h6><ul>
+<li><p>Seq2Seq 先把语句转换为一组词向量，通过对词向量的剪辑，提炼出语义向量。但对于如何剪辑有争议。有人提议使用<code>LSTM</code>等循环模型（RNN），来实现语义剪辑。RNN 模型的剪辑手段是：记忆门、遗忘门、和输出门。</p>
+</li>
+<li><p>RNN 模型的突出优势，是很好地解决了长距离依赖的难题；</p>
+</li>
+<li><p>作者使用<code>CNN</code>取代<code>RNN</code>循环模型，训练速度提高9倍，精度超越<code>RNN</code>；</p>
+</li>
+<li><p><strong>为什么更快？</strong></p>
+<ul>
+<li>卷积并行处理，而循环只能顺序处理，多个机器同时并行训练卷积模型，速度比串行训练循环模型快很多；</li>
+<li>可用<code>GPU</code>芯片来加速卷积模型的训练，而暂时还没有硬件能够加速<code>RNN</code>的训练；</li>
+</ul>
+</li>
+<li><p><strong>为什么更准？</strong></p>
+<ul>
+<li><code>CNN</code>的层层抽象，与<code>RNN</code>的三重门，其实异曲同工。虽手段不同，但目的都是忽略次要内容，传承重要内容。所以在精度方面二者差距不大； </li>
+<li>但是层级结构与循环网络链结构相比，提供了一种较短的路径来捕获词之间远程的依赖关系，因此也可以更好地捕捉更复杂的关系；</li>
+<li><code>Facebook translate</code> 与<code>Google translate</code>的精度差异，应该是由于<code>attention</code>的改进引起的；<ul>
+<li><code>Google Translate</code>的解码器使用单层<code>LSTM</code>模型，故<code>attention</code>也是单层的；<code>Facebook</code>的解码器使用<code>CNN</code>模型，是多层的，<code>attention</code> 是多跳的（multi-hop）；越是底层的<code>attention</code>越聚焦，细节越丰富；越是高层的<code>attention</code>，视野越开阔，抽象程度越高，越能抓住文章主旨；</li>
+<li><code>Google Translate</code>使用的<code>attention</code>，依赖于编码器生成的语义向量，而不依赖于输入的原生态的词向量。而<code>Facebook</code>的<code>attention</code>，对语义向量和原生态词向量兼收并取；语义向量负责把握主旨，保证解码器的输出不偏题；原生态词向量关注措辞，保障解码器的输出用词得当；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>将来<code>attention</code>的机制，还得融入规则。论文里只理解字面意思的<code>attention</code>的计算方式，无法理解“画外音”、“引经据典”、“含沙射影”的联想型语句。要正确理解“引经据典”和“含沙射影”，将来<code>attention</code>机制，还得融入知识图谱（张俊的猜想）；</p>
+</li>
+<li><p>模型结构：<code>encoder-decoder</code> +<code>attention</code>模块</p>
+<ul>
+<li>encoder 和 decoder采用了相同的卷积结构</li>
+<li>非线性部分采用门控结构<code>GLM</code>；</li>
+<li><code>attention</code>采用多跳注意<code>multi-hop attention</code>，即在<code>decoder</code>的每一个卷积层都会进行<code>attention</code>操作，并将结果输入到下一层；</li>
+</ul>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fwmltl8t76j30lm0nxq5u.jpg" alt=""></p>
+</li>
+<li><p>步骤：</p>
+<ul>
+<li><p><strong>1.Position Embeddings</strong></p>
+<ul>
+<li><p>词向量：<img src="http://www.zhihu.com/equation?tex=w+%3D+%28w_1%2C...%2Cw_n+%29" alt="w = (w_1,...,w_n )"></p>
+<p>位置向量：<img src="http://www.zhihu.com/equation?tex=p+%3D%28p_1%2C...%2Cp_n%29" alt="p =(p_1,...,p_n)"></p>
+<p>最终表示向量：(输入表示向量)<img src="http://www.zhihu.com/equation?tex=e%3D%28w_1%2Bp_1%2C...%2Cw_n%2Bp_n%29" alt="e=(w_1+p_1,...,w_n+p_n)"> （输出表示向量g)</p>
+</li>
+</ul>
+</li>
+<li><p><strong>2、Convolutional Block Structure</strong></p>
+<ul>
+<li><p>一次“卷积计算+非线性计算”看作一个单元<code>Convolutional Block</code>，单元在一个卷积层内共享；</p>
+</li>
+<li><p><strong>卷积计算：</strong>卷积核的大小为<img src="http://www.zhihu.com/equation?tex=W%5E%7Bkd%2A2d%7D" alt="W^{kd*2d}">，d为词向量长度，k为卷积窗口大小，每次卷积生成两列d维向量<img src="http://www.zhihu.com/equation?tex=Y+%3D%5BA%2CB%5D%5Cin+R%5E%7B2d%7D" alt="Y =[A,B]\in R^{2d}">；</p>
+</li>
+<li><p><strong>非线性计算：</strong>门控结构<code>GLM</code><img src="http://www.zhihu.com/equation?tex=v%28%5BA%2CB%5D%29+%3D+A+%5Cotimes+++%5Cdelta%28B%29" alt="v([A,B]) = A \otimes   \delta(B)"></p>
+</li>
+<li><p><strong>残差连接：</strong>把输入与输出相加，输入到下一层网络中。</p>
+<p><img src="http://www.zhihu.com/equation?tex=h%5El_i+%3Dv%28W%5El%5Bh%5E%7Bl-1%7D_%7Bi-k%2F2%7D+%2C...%2Ch%5E%7Bl-1%7D_%7Bi%2Bk%2F2%7D+%5D%2Bb%5El+%29%2Bh%5E%7Bl-1%7D_i" alt="h^l_i =v(W^l[h^{l-1}_{i-k/2} ,...,h^{l-1}_{i+k/2} ]+b^l )+h^{l-1}_i"></p>
+<h6 id="图示：单层Block的情况"><a href="#图示：单层Block的情况" class="headerlink" title="图示：单层Block的情况"></a>图示：单层Block的情况</h6><p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fx5kqwnp5rj30r80bc3zm.jpg" alt=""></p>
+<h6 id="图示：多层block；堆叠后第三层的每个输出都与输入中的7列有关"><a href="#图示：多层block；堆叠后第三层的每个输出都与输入中的7列有关" class="headerlink" title="图示：多层block；堆叠后第三层的每个输出都与输入中的7列有关"></a>图示：多层block；堆叠后第三层的每个输出都与输入中的7列有关</h6><p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fx5krb5bgyj30bu0cy0tg.jpg" alt=""></p>
+</li>
+<li><p><strong>输出：</strong>decoder的最后一层卷积层最后一个单元输出经过softmax得到下一个目标词的概率：</p>
+<p>​                        <img src="http://www.zhihu.com/equation?tex=p%28y_%7Bi%2B1%7D%7Cy_1%2C+.+.+.+%2C+y_i%2C+x%29+%3D+softmax%28W_o+h%5EL_i+%2B+b_o%29+" alt="p(y_{i+1}|y_1, . . . , y_i, x) = softmax(W_o h^L_i + b_o) "></p>
+</li>
+</ul>
+</li>
+<li><p><strong>3、Multi-step Attention</strong></p>
+<ul>
+<li><p>原理与传统的<code>attention</code>相似，权重由<code>decoder</code>的当前输出<img src="http://www.zhihu.com/equation?tex=h_i" alt="h_i">和<code>encoder</code>的所有输出共同决定，利用该权重<img src="http://www.zhihu.com/equation?tex=a_%7Bij%7D%5El" alt="a_{ij}^l">对<code>encoder</code>的输出进行加权，得到表示输入句子信息的向量<img src="http://www.zhihu.com/equation?tex=c_i" alt="c_i">，<img src="http://www.zhihu.com/equation?tex=c_i" alt="c_i">和<img src="http://www.zhihu.com/equation?tex=h_i" alt="h_i">相加组成新的<img src="http://www.zhihu.com/equation?tex=h_i" alt="h_i">；</p>
+<p>​                       <img src="https://ws2.sinaimg.cn/large/006tNbRwly1fx5ksy5f7zj309c0223yi.jpg" alt="">                </p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fx5kt6ud1ij30b803caa9.jpg" alt=""></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>  ![](https://ws3.sinaimg.cn/large/006tNbRwly1fx5ktetzqtj309c03mglo.jpg)
+</code></pre><ul>
+<li><h6 id="参考资料：-1"><a href="#参考资料：-1" class="headerlink" title="参考资料："></a>参考资料：</h6><h6 id="Convolutional-Sequence-to-Sequence-Learning"><a href="#Convolutional-Sequence-to-Sequence-Learning" class="headerlink" title="Convolutional Sequence to Sequence Learning"></a>Convolutional Sequence to Sequence Learning</h6><h6 id="https-zhuanlan-zhihu-com-p-26918935"><a href="#https-zhuanlan-zhihu-com-p-26918935" class="headerlink" title="https://zhuanlan.zhihu.com/p/26918935"></a><a href="https://zhuanlan.zhihu.com/p/26918935" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/26918935</a></h6><h6 id="https-zhuanlan-zhihu-com-p-27464080"><a href="#https-zhuanlan-zhihu-com-p-27464080" class="headerlink" title="https://zhuanlan.zhihu.com/p/27464080"></a><a href="https://zhuanlan.zhihu.com/p/27464080" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/27464080</a></h6></li>
+</ul>
+<h6 id="2-Attention-Is-All-You-Need"><a href="#2-Attention-Is-All-You-Need" class="headerlink" title="2.Attention Is All You Need"></a>2.Attention Is All You Need</h6><ul>
+<li><p>大框架：</p>
+<p><img src="https://jalammar.github.io/images/t/The_transformer_encoders_decoders.png" alt="img"></p>
+<p><img src="https://jalammar.github.io/images/t/The_transformer_encoder_decoder_stack.png" alt="img"></p>
+</li>
+</ul>
+<h6 id="encoder的输出，会和每一层的decoder进行结合"><a href="#encoder的输出，会和每一层的decoder进行结合" class="headerlink" title="encoder的输出，会和每一层的decoder进行结合"></a>encoder的输出，会和每一层的decoder进行结合</h6><p>  <img src="https://jalammar.github.io/images/t/Transformer_decoder.png" alt="img"></p>
+<h6 id="Encoder和Decoder的内部结构"><a href="#Encoder和Decoder的内部结构" class="headerlink" title="Encoder和Decoder的内部结构"></a>Encoder和Decoder的内部结构</h6><ul>
+<li><p>细节：<strong>Multi-Head Attention(Self-Attention) 与 Scaled Dot-Product Attention</strong></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fwmm6219jaj30rs0f241f.jpg" alt=""></p>
+<ul>
+<li><strong>从Scaled Dot-Product Attention到Multi-Head Attention</strong></li>
+</ul>
+</li>
+</ul>
+<p><img src="https://jalammar.github.io/images/t/transformer_self_attention_vectors.png" alt="img"></p>
+<h6 id="输入：两个单词-Thinking-Machines-通过嵌入变换得到X1-X2两个向量-1-x-4-。分别与Wq-Wk-Wv三个矩阵-4x3-点乘得到，-q1-q2-k1-k2-v1-v2-6个向量-1x3-；"><a href="#输入：两个单词-Thinking-Machines-通过嵌入变换得到X1-X2两个向量-1-x-4-。分别与Wq-Wk-Wv三个矩阵-4x3-点乘得到，-q1-q2-k1-k2-v1-v2-6个向量-1x3-；" class="headerlink" title="输入：两个单词(Thinking, Machines)通过嵌入变换得到X1,X2两个向量[1 x 4]。分别与Wq,Wk,Wv三个矩阵[4x3]点乘得到，{q1,q2},{k1,k2},{v1,v2} 6个向量[1x3]；"></a>输入：两个单词(Thinking, Machines)通过嵌入变换得到X1,X2两个向量[1 x 4]。分别与Wq,Wk,Wv三个矩阵[4x3]点乘得到，{q1,q2},{k1,k2},{v1,v2} 6个向量[1x3]；</h6><p><img src="https://jalammar.github.io/images/t/transformer_self_attention_score.png" alt="img"></p>
+<h6 id="向量-q1-k1-做点乘得到得分-Score-112，-q1-k2-做点乘得到得分96；"><a href="#向量-q1-k1-做点乘得到得分-Score-112，-q1-k2-做点乘得到得分96；" class="headerlink" title="向量{q1,k1}做点乘得到得分(Score) 112，{q1,k2}做点乘得到得分96；"></a>向量{q1,k1}做点乘得到得分(Score) 112，{q1,k2}做点乘得到得分96；</h6><p><img src="https://jalammar.github.io/images/t/self-attention_softmax.png" alt="img"></p>
+<h6 id="对该得分进行规范-除以8-。论文解释是为了使得梯度更稳定（工程问题没什么好解释的）；之后对得分『14，12』做softmax得到比例『0-88，0-12』；"><a href="#对该得分进行规范-除以8-。论文解释是为了使得梯度更稳定（工程问题没什么好解释的）；之后对得分『14，12』做softmax得到比例『0-88，0-12』；" class="headerlink" title="对该得分进行规范(除以8)。论文解释是为了使得梯度更稳定（工程问题没什么好解释的）；之后对得分『14，12』做softmax得到比例『0.88，0.12』；"></a>对该得分进行规范(除以8)。论文解释是为了使得梯度更稳定（工程问题没什么好解释的）；之后对得分『14，12』做softmax得到比例『0.88，0.12』；</h6><p><img src="https://jalammar.github.io/images/t/self-attention-output.png" alt="img"></p>
+<h6 id="得分比例「0-88-0-12」乘-v1-v2-值-Values-得到一个加权后的值，加起来得到z1就是这一层的输出。用Q-K去计算一个thinking对与-thinking-machine-的权重，用权重乘以-thinking-machine-的V得到加权后的-thinking-machine-的V-最后求和得到针对各单词的输出Z；"><a href="#得分比例「0-88-0-12」乘-v1-v2-值-Values-得到一个加权后的值，加起来得到z1就是这一层的输出。用Q-K去计算一个thinking对与-thinking-machine-的权重，用权重乘以-thinking-machine-的V得到加权后的-thinking-machine-的V-最后求和得到针对各单词的输出Z；" class="headerlink" title="得分比例「0.88 0.12」乘[v1 v2]值(Values)得到一个加权后的值，加起来得到z1就是这一层的输出。用Q,K去计算一个thinking对与[thinking, machine]的权重，用权重乘以[thinking,machine]的V得到加权后的[thinking,machine]的V,最后求和得到针对各单词的输出Z；"></a>得分比例「0.88 0.12」乘[v1 v2]值(Values)得到一个加权后的值，加起来得到z1就是这一层的输出。用Q,K去计算一个thinking对与[thinking, machine]的权重，用权重乘以[thinking,machine]的V得到加权后的[thinking,machine]的V,最后求和得到针对各单词的输出Z；</h6><p><img src="https://jalammar.github.io/images/t/self-attention-matrix-calculation.png" alt="img"></p>
+<h6 id="展示矩阵运算的例子：输入是一个-2x4-的矩阵（单词嵌入），每个运算是-4x3-的矩阵，求得Q-K-V；"><a href="#展示矩阵运算的例子：输入是一个-2x4-的矩阵（单词嵌入），每个运算是-4x3-的矩阵，求得Q-K-V；" class="headerlink" title="展示矩阵运算的例子：输入是一个[2x4]的矩阵（单词嵌入），每个运算是[4x3]的矩阵，求得Q,K,V；"></a>展示矩阵运算的例子：输入是一个[2x4]的矩阵（单词嵌入），每个运算是[4x3]的矩阵，求得Q,K,V；</h6><p><img src="https://jalammar.github.io/images/t/self-attention-matrix-calculation-2.png" alt="img"></p>
+<h6 id="Z是一个考虑过thinking周围单词-machine-的输出；"><a href="#Z是一个考虑过thinking周围单词-machine-的输出；" class="headerlink" title="Z是一个考虑过thinking周围单词(machine)的输出；"></a>Z是一个考虑过thinking周围单词(machine)的输出；</h6><p><img src="http://www.zhihu.com/equation?tex=Attention%28Q%2CK%2CV%29+%3D+softmax%28%5Cfrac%7BQK%5ET%7D%7B%5Csqrt%7Bd_k%7D%7D%29V+" alt="Attention(Q,K,V) = softmax(\frac{QK^T}{\sqrt{d_k}})V "></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwmqnxii0jj30go0epjrq.jpg" alt=""></p>
+<h6 id="Q·K-T其实就会组成一个-word2word-的-attention-map-每一个单词就对应每一个单词有一个权重，encoder里面是叫self-attention，decoder里面是叫masked-self-attention；"><a href="#Q·K-T其实就会组成一个-word2word-的-attention-map-每一个单词就对应每一个单词有一个权重，encoder里面是叫self-attention，decoder里面是叫masked-self-attention；" class="headerlink" title="Q·K.T其实就会组成一个 word2word 的 attention map ,每一个单词就对应每一个单词有一个权重，encoder里面是叫self-attention，decoder里面是叫masked self-attention；"></a>Q·K.T其实就会组成一个 word2word 的 attention map ,每一个单词就对应每一个单词有一个权重，encoder里面是叫self-attention，decoder里面是叫masked self-attention；</h6><p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fwmqp4hpkrj30go0f2mxf.jpg" alt=""></p>
+<h6 id="masked就是要在做language-modelling（或者像翻译）的时候，沿着对角线把灰色的区域用0覆盖掉，不给模型看到未来的信息；"><a href="#masked就是要在做language-modelling（或者像翻译）的时候，沿着对角线把灰色的区域用0覆盖掉，不给模型看到未来的信息；" class="headerlink" title="masked就是要在做language modelling（或者像翻译）的时候，沿着对角线把灰色的区域用0覆盖掉，不给模型看到未来的信息；"></a>masked就是要在做language modelling（或者像翻译）的时候，沿着对角线把灰色的区域用0覆盖掉，不给模型看到未来的信息；</h6><p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwmqqco07mj30go0f30t8.jpg" alt=""></p>
+<h6 id="softmax后就横轴合为1"><a href="#softmax后就横轴合为1" class="headerlink" title="softmax后就横轴合为1"></a>softmax后就横轴合为1</h6><p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fwmquw2pb3j30go08ymxt.jpg" alt=""></p>
+<h6 id="self-attention的一个问题：若输入句子很长，NxN的attention-map会导致内存爆炸。则应该减少batch-size多gpu训练，或剪断输入的长度，或是用conv对K-V做卷积减少长度；"><a href="#self-attention的一个问题：若输入句子很长，NxN的attention-map会导致内存爆炸。则应该减少batch-size多gpu训练，或剪断输入的长度，或是用conv对K-V做卷积减少长度；" class="headerlink" title="self-attention的一个问题：若输入句子很长，NxN的attention map会导致内存爆炸。则应该减少batch size多gpu训练，或剪断输入的长度，或是用conv对K,V做卷积减少长度；"></a>self-attention的一个问题：若输入句子很长，NxN的attention map会导致内存爆炸。则应该减少batch size多gpu训练，或剪断输入的长度，或是用conv对K,V做卷积减少长度；</h6><p>​    <img src="https://jalammar.github.io/images/t/transformer_attention_heads_z.png" alt="img"></p>
+<h6 id="Multi-Head-Attention就是把上面的过程做H次，然后把输出Z合起来；"><a href="#Multi-Head-Attention就是把上面的过程做H次，然后把输出Z合起来；" class="headerlink" title="Multi-Head Attention就是把上面的过程做H次，然后把输出Z合起来；"></a>Multi-Head Attention就是把上面的过程做H次，然后把输出Z合起来；</h6><p><img src="https://jalammar.github.io/images/t/transformer_attention_heads_weight_matrix_o.png" alt="img"></p>
+<h6 id="为了使得输出与输入结构对称，乘一个线性W0得到Z"><a href="#为了使得输出与输入结构对称，乘一个线性W0得到Z" class="headerlink" title="为了使得输出与输入结构对称，乘一个线性W0得到Z"></a>为了使得输出与输入结构对称，乘一个线性W0得到Z</h6><ul>
+<li><p><strong>Transformer</strong>的结构：</p>
+<ul>
+<li><strong>Transformer</strong>：由一个<code>encoder</code>, 一个<code>decoder</code>，一个<code>decoder</code>后的输出层<code>generator</code>，外加2个嵌入层<code>embedding</code>组成；</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fwmr6op8e8j30uc17u7et.jpg" alt=""></p>
+<ul>
+<li><strong>Encoder</strong>层的结构：共N层，<code>add&amp;norm</code>就是一个简单的<code>layer normalization</code>外加残差网络的结合；</li>
+<li><strong>Decoder</strong>层的结构：共N层；</li>
+<li><strong>Generator</strong>：前向网络<code>Linear</code> + <code>softmax</code></li>
+<li>关于<strong>Feed Forward</strong>：该网络的输入大小是可变的<img src="http://www.zhihu.com/equation?tex=n%5Ctimes+d_%7Bmodel%7D" alt="n\times d_{model}">（model可变），于是就独立作用在输入矩阵的每一列上的（<code>separately and identically</code>），其输入与输出都是<img src="http://www.zhihu.com/equation?tex=d_%7Bmodel%7D" alt="d_{model}">维的向量；</li>
+</ul>
+</li>
+<li><p>优点：</p>
+<ul>
+<li><p>靠<code>attention</code>机制，不使用<code>RNN</code>和<code>CNN</code>，并行度高；</p>
+</li>
+<li><p>提出<code>self-attention</code>，自己和自己做<code>attention</code>，使得每个词都有全局的语义信息（长依赖）：由于<code>Self-Attention</code>是每个词和所有词都要计算<code>Attention</code>，所以不管他们中间有多长距离，最大的路径长度也都只是1，可以捕获长距离依赖关系；</p>
+</li>
+<li><p>提出<code>multi-head attention</code>，可以看成<code>attention</code>的<code>ensemble</code>版本，不同<code>head</code>学习不同的子空间语义；</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><h6 id="参考资料：-2"><a href="#参考资料：-2" class="headerlink" title="参考资料："></a>参考资料：</h6><h6 id="Attention-Is-All-You-Need"><a href="#Attention-Is-All-You-Need" class="headerlink" title="Attention Is All You Need"></a>Attention Is All You Need</h6><h6 id="https-jalammar-github-io-illustrated-transformer"><a href="#https-jalammar-github-io-illustrated-transformer" class="headerlink" title="https://jalammar.github.io/illustrated-transformer/"></a><a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" rel="external">https://jalammar.github.io/illustrated-transformer/</a></h6><h6 id="https-zhuanlan-zhihu-com-p-39034683"><a href="#https-zhuanlan-zhihu-com-p-39034683" class="headerlink" title="https://zhuanlan.zhihu.com/p/39034683"></a><a href="https://zhuanlan.zhihu.com/p/39034683" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/39034683</a></h6></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="csy1998.com/2018/11/12/12_JavaScript学习/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -900,228 +1195,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="csy1998.com/2018/04/26/10_活着/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Gungnir">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/my_lover.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Gungnir">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/26/10_活着/" itemprop="url">活着</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-26T00:00:00+08:00">
-                2018-04-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/文学/" itemprop="url" rel="index">
-                    <span itemprop="name">文学</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2018/04/26/10_活着/" class="leancloud_visitors" data-flag-title="活着">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>活着，写的是人对苦难的承受能力，和对世界乐观的态度。</strong></p>
-<p>近来看了不少大陆“禁片”：李杨导演的《盲山》海外版，姜文导演的《太阳照常升起》和《阳光灿烂的日子》，之后想抽空看看《盲道》以及《鬼子来了》。阅毕，我对50到70年代的中国发生的事情愈发感到沉重，或许这样的事情，有些依然存在，有些已经稀少的可以忽略不计了，甚至已经不存在了，但是我觉得发生过的事，就不能闭上眼睛不去看它，而是应该以一种“敢于正视淋漓鲜血”的勇气去并深入地思考它。</p>
-<p>这也正是我想重拾《活着》的原因之一。文革前后时期背景的作品，其实接触过一些，莫言先生的《蛙》《生死疲劳》，余华先生的《兄弟》《许三观卖血记》等，或者说在所有看过的文学作品中，这类题材的作品算是比较多的，也是每次阅读之后都久久难以忘却的。重温《活着》，让我再一次感受中国那个特殊年代人们的所思所感所想所历。久久以来，多次提起这本书，都会让我想起一头牛，它可能是晚年陪伴着福贵的老牛，也可能是《生死疲劳》中转世为牲畜感受社会冷暖的那头老牛。我似乎像马晓军一样，记忆出了差错，但是有幸的是，我“中记忆的毒”不似他那样深，再览一次便能纠正。特此写下一二字，聊以自娱自省，勿忘，勿忘。</p>
-<p><strong>从自序开始</strong></p>
-<p>我很敬重余华先生，《活着》给他带来了更多内心的痛苦，他不得不在和现实的那一层紧张关系之中很长一段时间内成为一个愤怒和冷漠的作家，并一直以一种敌对的态度看待现实。</p>
-<blockquote>
-<p>我曾经希望自己成为一位童话作家，要不就是一位实实在在作品的拥有者，如果我能够成为这两者中的任何一个，我想我内心的痛苦将轻微很多，可是与此同时我的力量也会弱很多。</p>
-</blockquote>
-<p>美国民歌《老黑奴》让余华先生决定写下《活着》：老黑奴经历了一生的苦难，家人都先他而去，而依然友好地对待这个世界，没有一句抱怨的话。</p>
-<blockquote>
-<p>随着时间的推移，我内心的愤怒渐渐平息，我开始意识到一位真正的作家所寻找的是真理，是一种排斥道德判断的真理。作家的使命不是发泄，不是控诉或者揭露，他应该向人民展示高尚。这里所说的高尚不是那种单纯的美好，而是对一切事物理解之后的超然，对善和恶一视同仁，用同情的目光看待世界。</p>
-<p>写作的过程让我明白，人是为了活着本身而活着的，而不是威力活着之外的任何事物所活着。我感到我写下了高尚的作品。</p>
-</blockquote>
-<p><strong>正文</strong></p>
-<p>通过一位去乡间收集民间歌谣的年轻人和晚年福贵树下的交谈，故事开始了——应该说福贵的一生开始了。  </p>
-<p>徐家祖上田产丰富，历来徐老爷都是有身份有地位的大地主，可是徐家出了两个败家子。阔少爷福贵年轻时不学无术，好嫖好赌，不敬尊长，真可谓纨绔子弟，终于在一次与龙二的豪赌中将祖上剩下的全部家产输个干净。徐老爷子让福贵挑着倾家田产房产换来的几担铜钱去还债，回来时福贵肩膀都渗出血来。老爷子也是希望福贵明白这万贯家财一下子挑出去都如此不易，祖宗当年一点一点挣回这些家产那得多难。</p>
-<blockquote>
-<p>从前，我们徐家的老祖宗不过是养了一只小鸡，鸡养大后变成了鹅，鹅养大了变成了羊，再把羊养大，羊就变成了牛。我们徐家就是这样发起来的。</p>
-</blockquote>
-<p>晚年的福贵可能终于明白了自己为什么活着，他和那头老牛一样，知道自己时不久矣，仍拖着年迈的身体，日日耕作，伴星光而眠。</p>
-<blockquote>
-<p>可是我再也没遇到一个像福贵这样令我难忘的人了，对自己的经历如此清楚，又能如此精彩的讲述自己。他是那种能够看到自己过去模样的人，他可以准确地看到自己年轻时走路的姿态，甚至可以自己是如何衰老的。这样的老人在乡间实在难以遇到，也许是困苦的生活损坏了他们的记忆，面对往事他们通常显示得木讷，常常以不知所措的微笑塘塞过去。他们对自己的经历缺乏热情，仿佛是道听途说般的只记得零星几点，即使是这零星几点也都是自身之外的记忆，用一两句话表达了他们所认为的一切。在这里，我常常听到后辈们这样骂他们：</p>
-<p>​    “一大把年纪全活到狗身上去了。”</p>
-</blockquote>
-<p>福贵被抓去充军拉大炮之后，我常常替他担心家里的老母亲和家珍，本来是去找郎中看病结果被抓去充国军，过上了一段颠沛流离，一不小心还会有性命之忧的生活。家珍把所有的钱给了福贵去找郎中，丈夫多年没回来，一个准信都没有，和人间蒸发了无异；母亲因病躺在床上需要照顾，凤霞还小需要照看，还得忙下田做农活还租粮，这样的重担一个妇人家怎么能承受得下来！这段时间生活对她的重压或许也为后面凤霞的失语以及家珍的软骨病埋下了伏笔。这样想着，不觉为家珍感到同情和忧伤。家珍是一个聪慧而又坚强的女人。从家珍身上，我看到了“人对苦难的承受能力”是多么强。相比之下，我们生活中所经历的苦难可能要轻松得多了。</p>
-<p>在国军中拉大炮的生活中，我看到了战争给人带来的道德沦丧和人性恶的一面。几千伤号在无情的口号“一，二，三”之下，扔进土坑，大家都自顾不暇，没有任何一个人伸出救助之手，霎时间，哀鸿遍野。虽到最后声音气若游丝，但其中的悲伤，却越来越浓烈，想胸中涌上来的酒精味，久堵在鼻腔中那般浓烈。</p>
-<p>还有在没有木材生火煮粮食之时，</p>
-<blockquote>
-<p>一些人开始掘坟，用掘出的棺材板烧火。掘出了棺材就把死人骨头在坑外一丢，也不给重新埋了。到了那时候，谁也不怕死人骨头了，夜里就是挨在一起睡觉也不会做噩梦。</p>
-</blockquote>
-<p>虽寥寥数笔，且轻描淡写，却让我感到恐惧。中国人讲究入土为安，掘坟本就是天谴之为，烧了棺木，抛了尸体，之为生火煮粮食，那是一种极致的对人性的冷漠和道德的丧失。但是他们（包括福贵）没有忘记，活着本身。许久之后当他们回到正常甚至优渥的生活环境下之时，或许会感到自己内心深处对自己的谴责，但是他们有可能还活不到那时候哩。</p>
-<p>余华先生常借队长之口对大跃进以及人民公社进行侧面的讽刺，让人不禁发笑：</p>
-<blockquote>
-<p>“省事了吧？这人民公社好不好？”  </p>
-<p>“哭什么，人民公社给你盖新屋。”  </p>
-<p>“这钢铁能造三颗炮弹，全部打到台湾去，一颗打在蒋介石床上，一颗打在蒋介石吃饭的桌子上，一颗打在蒋介石的羊棚里。”</p>
-</blockquote>
-<p>龙二的枪毙也颇有意味。原本福贵是大地主，之后因为好赌将家产输给了龙二，龙二“代替”了福贵当起了大地主，结果解放后被人民政府认为是恶霸地主，被处以枪毙之刑。龙二被枪毙了五枪，这和之前福贵向大地主龙二借了五亩田，冥冥似有某种联系。像是报应，又有作者在其中增添的几分讽刺意味。</p>
-<blockquote>
-<p>“福贵，我是替你去死啊。”  </p>
-<p>我从人堆里挤出去，一个人往外走，走了十来步就听到“砰”的一枪，我想龙二彻底完蛋了，可紧接着又是“砰”的一枪，下面又打了三枪，总共是五枪。</p>
-</blockquote>
-<p>看到有庆，心里充满了温暖。有庆虽自娘胎中开始就常被父亲训斥，但是少年的善良和朝气是训斥不掉。有庆关爱他的那两只羊，每天惺忪着睡眼天没亮就要去割草喂羊，然后再飞奔去学校才能不迟到。也正因为如此，鞋子磨坏得快，家里穷没钱买新鞋给他，顽固的福贵骂他不爱护鞋子，他便每天出门时先小跑一段再脱下鞋子拎着跑去上学。想着有庆光脚丫踩在雪地上吧嗒吧嗒往学校跑，很是心疼。穷人家的孩子懂事早，少年的质朴和善良让我想起了《小鞋子》，那是一部关于十分温暖人心的作品，关于少年，关于善良。无论是含蓄向福贵表示自己想放弃读书帮助家里挣工分，还是得了体育老师的奖励第一时间想到却是将奖励分给家人……这些都让我在这部充满窒息般悲伤味道的作品里感受到一丝丝的温暖，就好似那苦茶水中仅存的一丝甘甜。</p>
-<blockquote>
-<p>有庆把大胖子给他的糖果全放在床上，先是分出了三堆，看了又看后，从另外两堆里各拿出两颗放进自己这一堆，又看了一会，再从自己这堆拿出两颗放到另两堆里。我知道他要把这一堆给凤霞，一堆给家珍，自己留一堆，就是没有我的。谁知道他又把三堆糖弄到一起，分出了四堆，他就这么分来分去，到最后还是只有三堆。</p>
-</blockquote>
-<p>凤霞和我的表姐同名，小时候一个村子玩大的，所以读着有一种特殊的亲切感。看到凤霞被一对老夫妇带走的时候，想到的是他会不会被不怀好意的老人欺负，后面看来没有这种事发生，才松了一口气。凤霞后来说不出话也着实是让我同情，这么懂事孝顺的好女孩，上天就是不愿意让她用语言表达自己的心声。每个人都不是完美的，或者说是有缺陷的。有些缺陷表现在身体上，而有些缺陷隐藏在心里。老天爷让凤霞变成哑巴，但是却让她拥有着一颗纯净的心灵。王四的缺陷就表现在心里。饥荒的时候抢过凤霞找到的地瓜昧着良心说是他先发现的，不得不让人感到愤恨。</p>
-<p>《活着》里面，生与死总是发生在一起，严丝合缝。县长夫人顺利生产的时候，有庆被无良医生抽血而死；二喜儿子来到世间的时候凤霞离开了所有人。不得不让人感到伤心，似乎余华先生刻意这样安排，生的喜悦从来不曾降临到福贵身边。这又一次写出了人对苦难的承受能力。</p>
-<p>有庆的死，让我感到忿恨，也感到一种呛到鼻头的酸楚，那么懂事善良的小男孩，长跑比赛还跑过了比他大很多的高年级学生，上一秒还活蹦乱跳，下一秒身体就一截一截地凉下去，躺在冰冷的医院里。更让人伤心的是福贵悲苦地埋葬了自己的儿子后还编着谎言不希望让家珍知道。然而，家珍在经历这么多苦难的折磨之后，也渐渐明白自己的孩子永远回不来了。一个人死的时候，最大的痛苦是由最爱他的人来承受的。那种彻身的无力感，那种浸透每个细胞的绝望与悲苦，可能一辈子都不想经历哪怕一次。</p>
-<blockquote>
-<p>​    家珍这时轻声说：“福贵，您别骗我了，我知道有庆死了。”</p>
-<p>​    她这么一说，我站在那里动不了，腿也开始发软。我的脖子上越来越湿，我知道那是家珍的眼泪，家珍说：</p>
-<p>​    “让我去看看有庆吧。”</p>
-</blockquote>
-<p>凤霞死的时候，最难受的应该是二喜和福贵了。二喜这辈子最爱的女人是凤霞，福贵这辈子最疼的女人也是凤霞。二喜背着凤霞回家的时候最让我难受，不忍心离开自己心爱的人的那种执着和固执，让人很是难过。</p>
-<blockquote>
-<p>​    那时候天黑了，街上全是雪，人都见不到，西北风呼呼吹来，雪花打在我们脸上，像是沙子一样。二喜哭得声音都哑了，走一段他说：</p>
-<p>​    “爹，我走不动了。”</p>
-<p>​    我让他把凤霞给我，他不肯，又走了几步他蹲了下去，说</p>
-<p>​    “爹，我腰疼的不行了。”</p>
-<p>​    那是哭的，把腰哭疼了。</p>
-</blockquote>
-<p>家珍死前说的一段话，让我很是感动，这样的苦日子，换做别人早就不干了，然而家珍却说下辈子还跟福贵，这是爱情还是亲情，我分不清楚，但是那很浓，浓得怎么都化不开。</p>
-<blockquote>
-<p>​    “这辈子也快过完了，你对我这么好，我也心满意足了，我为你生了一双儿女，也算是报答你了，下辈子我们还要在一起过。”</p>
-<p>​    “凤霞，有庆都死在我前头，我心也定了，用不着再为他们操心，怎么说我也是做娘的女人，两个孩子活着时都孝顺我，做人能做成这样我该知足了。”</p>
-<p>​    “家珍死得很好，死的平平安安，干干净净，死后一点是非都没有留下，不像村里有些女人，死了还有人说闲话。”</p>
-</blockquote>
-<p>再到后来，二喜被水泥板压死了，苦根吃豆子撑死了，只留下福贵一个人在这孤单的世上活着。买了一头和自己差不多老的老牛，终日耕着田，还一边对牛说：</p>
-<blockquote>
-<p>​    “今天有庆，二喜耕了二亩，家珍，凤霞耕了也有七八分田，苦根还小都耕了半亩。你嘛，耕了多少我就不说了，说出来你会觉得我是要羞你。话还得说回来，你年纪大了，能耕这么些田也是尽心尽力了。”</p>
-</blockquote>
-<p>亲人逝去时候，活着的人免不了思念，但大抵只在心中，并不会说出名来，因为那样徒添太多悲伤，怕自己承受不了。而像福贵这样整日整日地念着亲人的名字，就好似他们还在自己身边一样，看上去是乐观，但实际上那背后承载着的巨大的悲伤，我是无论如何也不敢去想象的。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1166,7 +1244,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1188,7 +1266,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
