@@ -142,7 +142,7 @@
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fwmr6op8e8j30uc17u7et.jpg">
 <meta property="og:image" content="http://www.zhihu.com/equation?tex=n%5Ctimes+d_%7Bmodel%7D">
 <meta property="og:image" content="http://www.zhihu.com/equation?tex=d_%7Bmodel%7D">
-<meta property="og:updated_time" content="2018-11-12T13:37:53.349Z">
+<meta property="og:updated_time" content="2018-11-12T13:45:15.331Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NLP论文笔记">
 <meta name="twitter:description" content="NLP论文笔记1.Sequence to Sequence Learning with Neural Networks encoder以及decoder都采用LSTM模型  模型很简单，就是最普通的多层LSTM  实现的不同之处：  用两种不同的LSTM，一种处理输入序列，一种处理输出序列；以可忽略的计算成本增加参数数量，同时在多个语言对上训练LSTM； 更深的LSTM会比浅的效果更好，故论文模型">
@@ -419,9 +419,9 @@
 <li>将输入的序列翻转之后作为输入效果提升；</li>
 </ul>
 </li>
-<li><p><code>decoder</code>应用了beam search来提升效果（每次生成词是取使得整个概率最高的前k个词作为候选）；beam size越大，效果越好，同时计算代价增大；</p>
+<li><p><code>decoder</code>应用了beam search来提升效果（每次生成词是取使得整个概率最高的前k个词作为候选）；beam size越大，效果越好，同时计算代价增大；<br></p>
 </li>
-<li><p>关于倒序输入效果提升：<code>rnn</code>是有偏模型，顺序越靠后的单词在最终占据的信息量越大，正序时最后一个词对应的state作为<code>decoder</code>的输入来预测第一个词，在<code>alignment</code>上来看显然这两个词并不是对齐的；倒序的话，<code>first word</code>成了<code>last word</code>，在<code>last state</code>中占据了主导，来预测<code>decoder</code>的第一个词，从某种意义上说实现了<code>alignment</code>，故效果提升。</p>
+<li><p>关于倒序输入效果提升：<code>rnn</code>是有偏模型，顺序越靠后的单词在最终占据的信息量越大，正序时最后一个词对应的state作为<code>decoder</code>的输入来预测第一个词，在<code>alignment</code>上来看显然这两个词并不是对齐的；倒序的话，<code>first word</code>成了<code>last word</code>，在<code>last state</code>中占据了主导，来预测<code>decoder</code>的第一个词，从某种意义上说实现了<code>alignment</code>，故效果提升；<br></p>
 </li>
 <li><p><code>decoder</code>本质上是一个<code>rnn</code>语言模型，不同的是在生成词的时候依赖于<code>encoder</code>的最后一个<code>hidden state</code>：</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwlx2k8vilj30l003aq32.jpg" alt=""></p>

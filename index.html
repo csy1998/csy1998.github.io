@@ -382,9 +382,9 @@
 <li>将输入的序列翻转之后作为输入效果提升；</li>
 </ul>
 </li>
-<li><p><code>decoder</code>应用了beam search来提升效果（每次生成词是取使得整个概率最高的前k个词作为候选）；beam size越大，效果越好，同时计算代价增大；</p>
+<li><p><code>decoder</code>应用了beam search来提升效果（每次生成词是取使得整个概率最高的前k个词作为候选）；beam size越大，效果越好，同时计算代价增大；<br></p>
 </li>
-<li><p>关于倒序输入效果提升：<code>rnn</code>是有偏模型，顺序越靠后的单词在最终占据的信息量越大，正序时最后一个词对应的state作为<code>decoder</code>的输入来预测第一个词，在<code>alignment</code>上来看显然这两个词并不是对齐的；倒序的话，<code>first word</code>成了<code>last word</code>，在<code>last state</code>中占据了主导，来预测<code>decoder</code>的第一个词，从某种意义上说实现了<code>alignment</code>，故效果提升。</p>
+<li><p>关于倒序输入效果提升：<code>rnn</code>是有偏模型，顺序越靠后的单词在最终占据的信息量越大，正序时最后一个词对应的state作为<code>decoder</code>的输入来预测第一个词，在<code>alignment</code>上来看显然这两个词并不是对齐的；倒序的话，<code>first word</code>成了<code>last word</code>，在<code>last state</code>中占据了主导，来预测<code>decoder</code>的第一个词，从某种意义上说实现了<code>alignment</code>，故效果提升；<br></p>
 </li>
 <li><p><code>decoder</code>本质上是一个<code>rnn</code>语言模型，不同的是在生成词的时候依赖于<code>encoder</code>的最后一个<code>hidden state</code>：</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwlx2k8vilj30l003aq32.jpg" alt=""></p>
