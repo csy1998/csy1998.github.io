@@ -371,8 +371,10 @@
         
           
             <h3 id="NLP论文笔记"><a href="#NLP论文笔记" class="headerlink" title="NLP论文笔记"></a>NLP论文笔记</h3><h6 id="1-Sequence-to-Sequence-Learning-with-Neural-Networks"><a href="#1-Sequence-to-Sequence-Learning-with-Neural-Networks" class="headerlink" title="1.Sequence to Sequence Learning with Neural Networks"></a>1.Sequence to Sequence Learning with Neural Networks</h6><ul>
-<li><code>encoder</code>以及<code>decoder</code>都采用<code>LSTM</code>模型</li>
-<li>模型很简单，就是最普通的多层<code>LSTM</code></li>
+<li><p><code>encoder</code>以及<code>decoder</code>都采用<code>LSTM</code>模型</p>
+</li>
+<li><p>模型很简单，就是最普通的多层<code>LSTM</code></p>
+</li>
 <li><p>实现的不同之处：</p>
 <ul>
 <li>用两种不同的<code>LSTM</code>，一种处理输入序列，一种处理输出序列；以可忽略的计算成本增加参数数量，同时在多个语言对上训练<code>LSTM</code>；</li>
@@ -396,13 +398,13 @@
 </li>
 <li><p>作者使用<code>CNN</code>取代<code>RNN</code>循环模型，训练速度提高9倍，精度超越<code>RNN</code>；</p>
 </li>
-<li><p><strong>为什么更快？</strong></p>
+<li><p>为什么更快？**</p>
 <ul>
 <li>卷积并行处理，而循环只能顺序处理，多个机器同时并行训练卷积模型，速度比串行训练循环模型快很多；</li>
 <li>可用<code>GPU</code>芯片来加速卷积模型的训练，而暂时还没有硬件能够加速<code>RNN</code>的训练；</li>
 </ul>
 </li>
-<li><p><strong>为什么更准？</strong></p>
+<li><p>为什么更准？</p>
 <ul>
 <li><code>CNN</code>的层层抽象，与<code>RNN</code>的三重门，其实异曲同工。虽手段不同，但目的都是忽略次要内容，传承重要内容。所以在精度方面二者差距不大； </li>
 <li>但是层级结构与循环网络链结构相比，提供了一种较短的路径来捕获词之间远程的依赖关系，因此也可以更好地捕捉更复杂的关系；</li>
